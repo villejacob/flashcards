@@ -10,7 +10,7 @@ class MainMenu(QWidget):
 
         #create main window
         #left, top, width, height
-        self.setGeometry(300, 300, 250, 150)
+        self.setGeometry(300, 300, 750, 450)
         self.setWindowTitle('Main Menu')
 
         stacks = [0, 1, 2] #replace with method getting list of stackIDs
