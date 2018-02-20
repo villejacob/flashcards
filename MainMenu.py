@@ -13,7 +13,7 @@ class MainMenu(QWidget):
         self.setGeometry(300, 300, 250, 150)
         self.setWindowTitle('Main Menu')
 
-        stacks = [0] #replace with method getting list of stackIDs
+        stacks = [0, 1, 2] #replace with method getting list of stackIDs
 
         fullList = QVBoxLayout()
 
