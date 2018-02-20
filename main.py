@@ -13,13 +13,13 @@ def main():
     #testing code to open up specific window from the start
     if len(sys.argv) > 1:
         if sys.argv[1] == 'edit':
-            estack = editStack()
+            estack = EditStack()
             estack.create()
         elif sys.argv[1] == 'view':
-            vstack = viewStack()
+            vstack = ViewStack()
             vstack.create()
     else:
-        menu = mainMenu()
+        menu = MainMenu()
         menu.create()
 
     #wait for application to exit

@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QMainWindow
 
-class editStack(QMainWindow):
+class ViewStack(QMainWindow):
 
     def __init__(self):
 
@@ -9,5 +9,5 @@ class editStack(QMainWindow):
     def create(self):
 
         self.setGeometry(300, 300, 250, 150)
-        self.setWindowTitle('Edit Stack')
+        self.setWindowTitle('View Stack')
         self.show()
