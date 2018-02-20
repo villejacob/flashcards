@@ -13,7 +13,7 @@ class MainMenu(QWidget):
         self.setGeometry(300, 300, 250, 150)
         self.setWindowTitle('Main Menu')
 
-        stacks = [] #replace with method getting list of stackIDs
+        stacks = [0] #replace with method getting list of stackIDs
 
         fullList = QVBoxLayout()
 
@@ -23,7 +23,7 @@ class MainMenu(QWidget):
 
             row.addStretch(1)
             #image would go here
-            row.addStretch(2)
+            row.addStretch(5)
 
             study = QPushButton('Study')
             row.addWidget(study)
@@ -34,10 +34,13 @@ class MainMenu(QWidget):
             delete = QPushButton('Delete')
             row.addWidget(delete)
 
+            row.addStretch(1)
+
             fullList.addStretch(1)
             fullList.addLayout(row)
 
         #add button for new stack
+        fullList.addStretch(1)
         row = QHBoxLayout()
         addNew = QPushButton('Add new stack')
         row.addWidget(addNew)
