@@ -2,9 +2,9 @@
 
 import sys
 from PyQt5.QtWidgets import QApplication
-from mainMenu import *
-from viewStack import *
-from editStack import *
+from MainMenu import *
+from ViewStack import *
+from EditStack import *
 
 def main():
     #create the application

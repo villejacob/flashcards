@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import QMainWindow, QHBoxLayout, QVBoxLayout, QPushButton
+from PyQt5.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QVBoxLayout, QPushButton
 
-class MainMenu(QMainWindow):
+class MainMenu(QWidget):
 
     def __init__(self):
 
