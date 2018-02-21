@@ -1,10 +1,27 @@
-from PyQt5.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QVBoxLayout, QPushButton
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import pyqtSlot
 
 class MainMenu(QWidget):
 
     def __init__(self):
 
         super().__init__()
+
+    @pyqtSlot()
+    def onStudyClick(self, stackID):
+        print('Studying Stack ' + str(stackID))
+
+    @pyqtSlot()
+    def onEditClick(self, stackID):
+        print('Editing Stack ' + str(stackID))
+
+    @pyqtSlot()
+    def onDeleteClick(self, stackID):
+        print('Deleting Stack ' + str(stackID))
+
+    @pyqtSlot()
+    def onAddStackClick(self):
+        print('Adding Stack')
 
     def create(self):
 
@@ -26,12 +43,15 @@ class MainMenu(QWidget):
             row.addStretch(5)
 
             study = QPushButton('Study')
+            study.clicked.connect(lambda : self.onStudyClick(stack))
             row.addWidget(study)
 
             edit = QPushButton('Edit')
+            edit.clicked.connect(lambda : self.onEditClick(stack))
             row.addWidget(edit)
 
             delete = QPushButton('Delete')
+            delete.clicked.connect(lambda : self.onDeleteClick(stack))
             row.addWidget(delete)
 
             row.addStretch(1)
@@ -43,6 +63,7 @@ class MainMenu(QWidget):
         fullList.addStretch(1)
         row = QHBoxLayout()
         addNew = QPushButton('Add new stack')
+        addNew.clicked.connect(self.onAddStackClick)
         row.addWidget(addNew)
         fullList.addLayout(row)
 
