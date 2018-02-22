@@ -30,11 +30,20 @@ class MainMenu(QWidget):
         self.setGeometry(300, 300, 750, 450)
         self.setWindowTitle('Main Menu')
 
+        #keep track of buttons
+        self.studyButttons = []
+        self.editButtons = []
+        self.deleteButtons = []
+
         stacks = [0, 1, 2] #replace with method getting list of stackIDs
 
-        fullList = QVBoxLayout()
+        self.fullList = QVBoxLayout()
 
         #layout the list of stacks
+        #essentially this creates a bunch of horizontal boxes (QHBoxLayout) and
+        #adds the elements for each stack to them, each of these hboxes is then
+        #added to vertical box (QVBoxLayout) created above to create the overall
+        #layout
         for stack in stacks:
             row = QHBoxLayout()
 
@@ -42,30 +51,40 @@ class MainMenu(QWidget):
             #image would go here
             row.addStretch(5)
 
+            #note: the "check" parameter is needed in the lambda as it
+            #is passed by the clicked event (it is a boolean signifying if
+            # the button has been checked, if checkable)
+
+            #create study button
             study = QPushButton('Study')
-            study.clicked.connect(lambda : self.onStudyClick(stack))
+            study.clicked.connect(lambda check,x=stack: self.onStudyClick(x))
+            self.studyButttons.append(study)
             row.addWidget(study)
 
+            #create edit button
             edit = QPushButton('Edit')
-            edit.clicked.connect(lambda : self.onEditClick(stack))
+            edit.clicked.connect(lambda check,x=stack: self.onEditClick(x))
+            self.editButtons.append(edit)
             row.addWidget(edit)
 
+            #create delete button
             delete = QPushButton('Delete')
-            delete.clicked.connect(lambda : self.onDeleteClick(stack))
+            delete.clicked.connect(lambda check,x=stack: self.onDeleteClick(x))
+            self.deleteButtons.append(delete)
             row.addWidget(delete)
 
             row.addStretch(1)
 
-            fullList.addStretch(1)
-            fullList.addLayout(row)
+            self.fullList.addStretch(1)
+            self.fullList.addLayout(row)
 
         #add button for new stack
-        fullList.addStretch(1)
+        self.fullList.addStretch(1)
         row = QHBoxLayout()
         addNew = QPushButton('Add new stack')
         addNew.clicked.connect(self.onAddStackClick)
         row.addWidget(addNew)
-        fullList.addLayout(row)
+        self.fullList.addLayout(row)
 
         #set the layout for the window to the vbox layout
         self.setLayout(fullList)
