@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QVBoxLayout, QPushButton
+from ImagePreview import *
 
 class MainMenu(QWidget):
 
@@ -23,6 +24,9 @@ class MainMenu(QWidget):
 
             row.addStretch(1)
             #image would go here
+            image = ImagePreview()
+            row.addWidget(image)
+
             row.addStretch(5)
 
             study = QPushButton('Study')
