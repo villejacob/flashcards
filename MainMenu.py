@@ -1,5 +1,7 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import pyqtSlot
+from ViewStack import *
+from EditStack import *
 
 class MainMenu(QWidget):
 
@@ -9,10 +11,16 @@ class MainMenu(QWidget):
 
     @pyqtSlot()
     def onStudyClick(self, stackID):
+        self.hide()
+        self.vs = ViewStack(self, stackID)
+        self.vs.create()
         print('Studying Stack ' + str(stackID))
 
     @pyqtSlot()
     def onEditClick(self, stackID):
+        self.hide()
+        self.es = EditStack(self, stackID)
+        self.es.create()
         print('Editing Stack ' + str(stackID))
 
     @pyqtSlot()

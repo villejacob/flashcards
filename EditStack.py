@@ -16,7 +16,7 @@ class EditStack(QMainWindow):
 
     #save changes to database
     def save():
-        pass
+        self.unsavedChanges = False
 
     #the MainMenu needs to be opened on close
     #edits need to be checked to unsure nothing is unsaved
