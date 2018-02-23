@@ -87,6 +87,6 @@ class MainMenu(QWidget):
         self.fullList.addLayout(row)
 
         #set the layout for the window to the vbox layout
-        self.setLayout(fullList)
+        self.setLayout(self.fullList)
 
         self.show()
