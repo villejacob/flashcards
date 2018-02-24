@@ -15,7 +15,7 @@ class EditStack(QMainWindow):
         self.show()
 
     #save changes to database
-    def save():
+    def save(self):
         self.unsavedChanges = False
 
     #the MainMenu needs to be opened on close
