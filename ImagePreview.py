@@ -9,13 +9,13 @@ class ImagePreview(QWidget):
         self.initUI()
 
     def initUI(self):
-
+        self.setMinimumSize(32,32)
         label = QLabel(self)
         #Needs to have dynamic pathing
         pixmap = QPixmap('example.jpg')
         resize_pixmap = pixmap.scaled(32, 32)
         label.setPixmap(resize_pixmap)
-        self.show()
+        #self.show()
 
 #Used for testing functionality
 # if __name__ == '__main__':
