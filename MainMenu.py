@@ -31,6 +31,14 @@ class MainMenu(QWidget):
     def onAddStackClick(self):
         print('Adding Stack')
 
+        text, okPressed = QInputDialog.getText(self,
+                            'Add Stack',
+                            'Enter name for new stack',
+                            QLineEdit.Normal, '')
+        
+        if okPressed:
+            print('New Stack: ' + text)
+
     def create(self):
 
         #create main window
