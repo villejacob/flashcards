@@ -54,7 +54,8 @@ class MainMenu(QWidget):
         self.editButtons = []
         self.deleteButtons = []
 
-        stacks = [0, 1, 2] #replace with method getting list of stackIDs
+        rows = select_all_stacks(self.DBConnection)
+        stacks = [row[0] for row in rows] #get stackIDs
 
         self.fullList = QVBoxLayout()
 
