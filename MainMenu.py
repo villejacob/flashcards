@@ -40,6 +40,8 @@ class MainMenu(QWidget):
         if okPressed:
             print('New Stack: ' + text)
             create_stack(self.DBConnection, (text, 'never'))
+            QWidget().setLayout(self.layout())
+            self.create() #redraw on add
 
 
     def create(self):
