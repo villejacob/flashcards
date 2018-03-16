@@ -2,11 +2,17 @@
 
 import sys
 from PyQt5.QtWidgets import QApplication
+from db.helpers import *
 from MainMenu import *
 from ViewStack import *
 from EditStack import *
 
 def main():
+    # connect to the db
+    conn = create_connection("db/flashcards.db")
+    with conn:
+        initialize_tables(conn)
+
     #create the application
     application = QApplication(sys.argv)
 
@@ -24,8 +30,6 @@ def main():
 
     #wait for application to exit
     sys.exit(application.exec_())
-
-
 
 
 if __name__ == "__main__":
