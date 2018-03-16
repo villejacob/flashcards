@@ -2,11 +2,12 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import pyqtSlot
 from ViewStack import *
 from EditStack import *
+from db.helpers import *
 
 class MainMenu(QWidget):
 
-    def __init__(self):
-
+    def __init__(self, DBConnection):
+        self.DBConnection = DBConnection
         super().__init__()
 
     @pyqtSlot()
@@ -35,9 +36,11 @@ class MainMenu(QWidget):
                             'Add Stack',
                             'Enter name for new stack',
                             QLineEdit.Normal, '')
-        
+
         if okPressed:
             print('New Stack: ' + text)
+            create_stack(self.DBConnection, (text, 'never'))
+
 
     def create(self):
 
