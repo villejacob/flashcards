@@ -15,7 +15,7 @@ def create_connection(db_file):
 def initialize_tables(conn):
     create_table(conn, sql_create_stacks_table)
     create_table(conn, sql_create_cards_table)
-    
+
 
 def create_table(conn, create_table_sql):
     try:
@@ -28,6 +28,7 @@ def create_table(conn, create_table_sql):
 def create_stack(conn, stack):
     cur = conn.cursor()
     cur.execute(sql_insert_stack, stack)
+    conn.commit()
     return cur.lastrowid
 
 
