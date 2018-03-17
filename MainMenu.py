@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtCore import *
 from ViewStack import *
 from EditStack import *
 from db.helpers import *
@@ -8,19 +8,26 @@ class MainMenu(QWidget):
 
     def __init__(self, DBConnection):
         self.DBConnection = DBConnection
+
         super().__init__()
+
+        #create main window
+        #left, top, width, height
+        self.setGeometry(300, 300, 750, 450)
+        self.setWindowTitle('Main Menu')
+
 
     @pyqtSlot()
     def onStudyClick(self, stackID):
         self.hide()
-        self.vs = ViewStack(self, stackID)
+        self.vs = ViewStack(self, stackID, self.pos(), self.size())
         self.vs.create()
         print('Studying Stack ' + str(stackID))
 
     @pyqtSlot()
     def onEditClick(self, stackID):
         self.hide()
-        self.es = EditStack(self, stackID)
+        self.es = EditStack(self, stackID, self.pos(), self.size())
         self.es.create()
         print('Editing Stack ' + str(stackID))
 
@@ -45,11 +52,6 @@ class MainMenu(QWidget):
 
 
     def create(self):
-
-        #create main window
-        #left, top, width, height
-        self.setGeometry(300, 300, 750, 450)
-        self.setWindowTitle('Main Menu')
 
         #keep track of buttons
         self.studyButttons = []
