@@ -22,11 +22,13 @@ class ViewStack(QWidget):
 
     @pyqtSlot()
     def backToMainMenu(self):
+        #switch to main menu with current size and position
         openMainMenu(self)
         self.hide()
 
     @pyqtSlot()
     def enterEditMode(self):
+        #switch to main menu with current size and position
         openEditWindow(self)
         self.hide()
 
@@ -39,16 +41,21 @@ class ViewStack(QWidget):
 
         row = QHBoxLayout()
 
+        #create button for main menu
+        #button will be fixed against left and top
         back = QPushButton('Main Menu')
         back.clicked.connect(self.backToMainMenu)
         row.addWidget(back)
 
         row.addStretch(1)
 
+        #create button for main menu
+        #button will be fixed against right and top
         back = QPushButton('Edit')
         back.clicked.connect(self.enterEditMode)
         row.addWidget(back)
 
+        #add row for navigation
         self.fullLayout.addLayout(row)
 
         self.fullLayout.addStretch(1)

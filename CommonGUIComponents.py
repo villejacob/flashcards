@@ -13,12 +13,16 @@ def openMainMenu(curWindow):
         move(curWindow, curWindow.mainMenu)
 
 def openEditWindow(curWindow):
+    #NOTE: needs to imported like this because
+    #of circular dependencies
     import EditStack
     curWindow.mainMenu.es = EditStack.EditStack(curWindow.mainMenu,
             curWindow.stackID, curWindow.pos(), curWindow.size())
     curWindow.mainMenu.es.create()
 
 def openViewWindow(curWindow):
+    #NOTE: needs to imported like this because
+    #of circular dependencies
     import ViewStack
     curWindow.mainMenu.vs = ViewStack.ViewStack(curWindow.mainMenu,
             curWindow.stackID, curWindow.pos(), curWindow.size())

@@ -46,19 +46,29 @@ class MainMenu(QWidget):
     @pyqtSlot()
     def onDeleteClick(self, stackID):
         print('Deleting Stack ' + str(stackID))
+        #TODO: delete stack from database
 
     @pyqtSlot()
     def onAddStackClick(self):
         print('Adding Stack')
 
+        #create dialog box with text input for the
+        #name of the stack
         text, okPressed = QInputDialog.getText(self,
                             'Add Stack',
                             'Enter name for new stack',
                             QLineEdit.Normal, '')
 
+        #if the ok button was pressed create the new stack
+        #will be false if cancel button is pressed or the
+        #dialog is closed
         if okPressed:
             print('New Stack: ' + text)
             create_stack(self.DBConnection, (text, 'never'))
+
+            #create a new widget and apply the current layout to it
+            #this removes the reference so that the layout will be
+            #garbage collected
             QWidget().setLayout(self.layout())
             self.create() #redraw on add
 
@@ -70,8 +80,9 @@ class MainMenu(QWidget):
         self.editButtons = []
         self.deleteButtons = []
 
+        #get rows from database
         rows = select_all_stacks(self.DBConnection)
-        stacks = [row[0] for row in rows] #get stackIDs
+        stacks = [row[0] for row in rows] #get stackIDs from rows
 
         self.fullList = QVBoxLayout()
 

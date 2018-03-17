@@ -39,12 +39,16 @@ class EditStack(QWidget):
 
         row = QHBoxLayout()
 
+        #create button for main menu
+        #button will be fixed against left and top
         back = QPushButton('Main Menu')
         back.clicked.connect(self.backToMainMenu)
         row.addWidget(back)
 
         row.addStretch(1)
 
+        #create button for main menu
+        #button will be fixed against right and top
         back = QPushButton('Study')
         back.clicked.connect(self.enterStudyMode)
         row.addWidget(back)
@@ -55,7 +59,7 @@ class EditStack(QWidget):
 
         #rest of GUI added here
 
-        #TODO: add view stack code
+        #TODO: add edit stack code
 
         self.setLayout(self.fullLayout)
 
