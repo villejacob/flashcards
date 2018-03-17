@@ -1,7 +1,7 @@
-from PyQt5.QtWidgets import QMainWindow, QMessageBox
+from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
-class EditStack(QMainWindow):
+class EditStack(QWidget):
 
     def __init__(self, mainMenu=None, stackID=None,
                     pos = QPoint(300, 300), size = QSize(250, 150)):
