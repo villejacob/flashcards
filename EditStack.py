@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
+from CommonGUIComponents import *
 
 class EditStack(QWidget):
 
@@ -19,9 +20,39 @@ class EditStack(QWidget):
 
         self.setWindowTitle('Edit Stack')
 
+    @pyqtSlot()
+    def backToMainMenu(self):
+        self.hide()
+        openMainMenu(self)
 
+    @pyqtSlot()
+    def enterStudyMode(self):
+        self.hide()
+        openViewWindow(self)
 
     def create(self):
+
+        self.fullLayout = QVBoxLayout()
+
+        row = QHBoxLayout()
+
+        back = QPushButton('Main Menu')
+        back.clicked.connect(self.backToMainMenu)
+        row.addWidget(back)
+
+        row.addStretch(1)
+
+        back = QPushButton('Study')
+        back.clicked.connect(self.enterStudyMode)
+        row.addWidget(back)
+
+        self.fullLayout.addLayout(row)
+
+        self.fullLayout.addStretch(1)
+
+        self.setLayout(self.fullLayout)
+
+
         self.show()
 
     #save changes to database
@@ -44,11 +75,5 @@ class EditStack(QWidget):
                 event.ignore()
                 return
 
-        if self.mainMenu is not None:
-            #copy size and position over to main menu
-            self.mainMenu.move(self.pos())
-            self.mainMenu.resize(self.size())
-
-            #show main menu
-            self.mainMenu.show()
+        openMainMenu(self)
         event.accept()

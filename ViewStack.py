@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
+from CommonGUIComponents import *
 
 class ViewStack(QWidget):
 
@@ -19,16 +20,41 @@ class ViewStack(QWidget):
         self.setWindowTitle('View Stack')
 
 
+    @pyqtSlot()
+    def backToMainMenu(self):
+        openMainMenu(self)
+        self.hide()
+
+    @pyqtSlot()
+    def enterEditMode(self):
+        openEditWindow(self)
+        self.hide()
+
     def create(self):
+
+        self.fullLayout = QVBoxLayout()
+
+        row = QHBoxLayout()
+
+        back = QPushButton('Main Menu')
+        back.clicked.connect(self.backToMainMenu)
+        row.addWidget(back)
+
+        row.addStretch(1)
+
+        back = QPushButton('Edit')
+        back.clicked.connect(self.enterEditMode)
+        row.addWidget(back)
+
+        self.fullLayout.addLayout(row)
+
+        self.fullLayout.addStretch(1)
+
+        self.setLayout(self.fullLayout)
+
         self.show()
 
     #the MainMenu needs to be opened on close
     def closeEvent(self, event):
-        if self.mainMenu is not None:
-            #copy size and position over to main menu
-            self.mainMenu.move(self.pos())
-            self.mainMenu.resize(self.size())
-
-            #show main menu
-            self.mainMenu.show()
+        openMainMenu(self)
         event.accept()

@@ -19,14 +19,26 @@ class MainMenu(QWidget):
 
     @pyqtSlot()
     def onStudyClick(self, stackID):
+        #hide the current window
         self.hide()
+
+        #clear out the edit window
+        self.es = None
+
+        #create the view window
         self.vs = ViewStack(self, stackID, self.pos(), self.size())
         self.vs.create()
         print('Studying Stack ' + str(stackID))
 
     @pyqtSlot()
     def onEditClick(self, stackID):
+        #hide the current window
         self.hide()
+
+        #clear out the previous view window
+        self.vs = None
+
+        #create the edit window
         self.es = EditStack(self, stackID, self.pos(), self.size())
         self.es.create()
         print('Editing Stack ' + str(stackID))
