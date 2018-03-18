@@ -34,6 +34,9 @@ class ViewStack(QWidget):
 
         self.fullLayout = QVBoxLayout()
 
+        #create the top row of the layout to have
+        #a main menu button and a edit button
+
         row = QHBoxLayout()
 
         back = QPushButton('Main Menu')
@@ -49,6 +52,11 @@ class ViewStack(QWidget):
         self.fullLayout.addLayout(row)
 
         self.fullLayout.addStretch(1)
+
+        #GUI for showing cards goes here
+        #needs to be added to self.fullLayout
+
+        #TODO: add view stack code
 
         self.setLayout(self.fullLayout)
 
