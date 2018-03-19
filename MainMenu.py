@@ -58,8 +58,9 @@ class MainMenu(QWidget):
             row = QHBoxLayout()
 
             row.addStretch(1)
-            #image would go here
+
             image = ImagePreview()
+            
             row.addWidget(image)
 
             row.addStretch(5)
