@@ -1,7 +1,9 @@
 from PyQt5.QtWidgets import *
+from ImagePreview import *
 from PyQt5.QtCore import pyqtSlot
 from ViewStack import *
 from EditStack import *
+
 
 class MainMenu(QWidget):
 
@@ -56,7 +58,11 @@ class MainMenu(QWidget):
             row = QHBoxLayout()
 
             row.addStretch(1)
-            #image would go here
+
+            image = ImagePreview()
+            
+            row.addWidget(image)
+
             row.addStretch(5)
 
             #note: the "check" parameter is needed in the lambda as it
