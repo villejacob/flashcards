@@ -22,11 +22,15 @@ class EditStack(QWidget):
 
     @pyqtSlot()
     def backToMainMenu(self):
+        if not self.checkSaved():
+            return
         self.hide()
         openMainMenu(self)
 
     @pyqtSlot()
     def enterStudyMode(self):
+        if not self.checkSaved():
+            return
         self.hide()
         openViewWindow(self)
 
@@ -69,6 +73,9 @@ class EditStack(QWidget):
 
         editArea = QGroupBox('Edit Card')
 
+        #this could potentially be dynamically generated
+        #it would be challenging to handle the updates
+
         editForm = QFormLayout()
 
         self.frontText = QTextEdit()
@@ -78,6 +85,8 @@ class EditStack(QWidget):
         self.backText = QTextEdit()
         self.backText.textChanged.connect(self.makeChanges)
         editForm.addRow(QLabel('Back text'), self.backText)
+
+        #TODO: file browser for selecting an image
 
         editArea.setLayout(editForm)
 
@@ -119,14 +128,14 @@ class EditStack(QWidget):
     #sets the unsavedChanges flag
     #a method is needed because assignment isn't allowed inside of lambda
     #this method is called whenever the textboxes are modified
+    @pyqtSlot()
     def makeChanges(self):
         self.unsavedChanges = True
 
-    #the MainMenu needs to be opened on close
-    #edits need to be checked to unsure nothing is unsaved
-    def closeEvent(self, event):
-        close = True
-
+    #check if the content has been saved
+    #and save it if the user choses to
+    #returns whether it is OK to exit
+    def checkSaved(self):
         if self.unsavedChanges:
             reply = QMessageBox.question(self, 'Unsaved changes',
                 'Would you like to save your changes?',
@@ -135,8 +144,19 @@ class EditStack(QWidget):
             if reply == QMessageBox.Save:
                 self.save()
             elif reply == QMessageBox.Cancel:
-                event.ignore()
-                return
+                return False
+
+        return True
+
+
+    #the MainMenu needs to be opened on close
+    #edits need to be checked to unsure nothing is unsaved
+    def closeEvent(self, event):
+        close = True
+
+        if not self.checkSaved():
+            event.ignore()
+            return
 
         openMainMenu(self)
         event.accept()
