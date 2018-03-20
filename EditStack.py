@@ -59,7 +59,37 @@ class EditStack(QWidget):
 
         #rest of GUI added here
 
-        #TODO: add edit stack code
+        row = QHBoxLayout()
+
+        #TODO: list of cards
+
+        row.addStretch(2)
+
+        editSplit = QVBoxLayout()
+
+        editArea = QGroupBox('Edit Card')
+
+        editForm = QFormLayout()
+
+        editForm.addRow(QLabel('Front text'), QTextEdit())
+        editForm.addRow(QLabel('Back text'), QTextEdit())
+
+        editArea.setLayout(editForm)
+
+        editSplit.addWidget(editArea)
+
+        editSplit.addStretch(1)
+
+        #TODO: add drag/drop components (maybe)
+        #could be something else
+
+        row.addLayout(editSplit)
+
+        row.addStretch(1)
+
+        self.fullLayout.addLayout(row)
+
+        self.fullLayout.addStretch(1)
 
         self.setLayout(self.fullLayout)
 
