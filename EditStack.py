@@ -71,12 +71,23 @@ class EditStack(QWidget):
 
         editForm = QFormLayout()
 
-        editForm.addRow(QLabel('Front text'), QTextEdit())
-        editForm.addRow(QLabel('Back text'), QTextEdit())
+        self.frontText = QTextEdit()
+        self.frontText.textChanged.connect(self.makeChanges)
+        editForm.addRow(QLabel('Front text'), self.frontText)
+
+        self.backText = QTextEdit()
+        self.backText.textChanged.connect(self.makeChanges)
+        editForm.addRow(QLabel('Back text'), self.backText)
 
         editArea.setLayout(editForm)
 
         editSplit.addWidget(editArea)
+
+        save_dont = QDialogButtonBox(QDialogButtonBox.Save | QDialogButtonBox.Discard)
+        save_dont.accepted.connect(self.save)
+        save_dont.rejected.connect(self.reject)
+
+        editSplit.addWidget(save_dont)
 
         editSplit.addStretch(1)
 
@@ -98,7 +109,18 @@ class EditStack(QWidget):
 
     #save changes to database
     def save(self):
+        #TODO: save to datbase
         self.unsavedChanges = False
+
+    def reject(self):
+        #TODO: reload data from database
+        self.unsavedChanges = False
+
+    #sets the unsavedChanges flag
+    #a method is needed because assignment isn't allowed inside of lambda
+    #this method is called whenever the textboxes are modified
+    def makeChanges(self):
+        self.unsavedChanges = True
 
     #the MainMenu needs to be opened on close
     #edits need to be checked to unsure nothing is unsaved
