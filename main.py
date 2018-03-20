@@ -10,8 +10,11 @@ from EditStack import *
 def main():
     # connect to the db
     conn = create_connection("db/flashcards.db")
-    with conn:
-        initialize_tables(conn)
+
+    initialize_tables(conn)
+
+    #debuging output to see the current set of stacks
+    select_all_stacks(conn)
 
     #create the application
     application = QApplication(sys.argv)
@@ -25,7 +28,7 @@ def main():
             vstack = ViewStack()
             vstack.create()
     else:
-        menu = MainMenu()
+        menu = MainMenu(conn)
         menu.create()
 
     #wait for application to exit

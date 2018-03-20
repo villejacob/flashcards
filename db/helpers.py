@@ -40,3 +40,5 @@ def select_all_stacks(conn):
 
     for row in rows:
         print(row)
+
+    return rows
