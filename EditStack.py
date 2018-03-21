@@ -92,11 +92,11 @@ class EditStack(QWidget):
 
         editSplit.addWidget(editArea)
 
-        save_dont = QDialogButtonBox(QDialogButtonBox.Save | QDialogButtonBox.Discard)
-        save_dont.accepted.connect(self.save)
-        save_dont.rejected.connect(self.reject)
+        saveChangesDialog = QDialogButtonBox(QDialogButtonBox.Save | QDialogButtonBox.Discard)
+        saveChangesDialog.accepted.connect(self.save)
+        saveChangesDialog.rejected.connect(self.reject)
 
-        editSplit.addWidget(save_dont)
+        editSplit.addWidget(saveChangesDialog)
 
         editSplit.addStretch(1)
 
