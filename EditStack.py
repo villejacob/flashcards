@@ -22,11 +22,15 @@ class EditStack(QWidget):
 
     @pyqtSlot()
     def backToMainMenu(self):
+        if not self.checkSaved():
+            return
         self.hide()
         openMainMenu(self)
 
     @pyqtSlot()
     def enterStudyMode(self):
+        if not self.checkSaved():
+            return
         self.hide()
         openViewWindow(self)
 
@@ -59,7 +63,53 @@ class EditStack(QWidget):
 
         #rest of GUI added here
 
-        #TODO: add edit stack code
+        row = QHBoxLayout()
+
+        #TODO: list of cards
+
+        row.addStretch(2)
+
+        editSplit = QVBoxLayout()
+
+        editArea = QGroupBox('Edit Card')
+
+        #this could potentially be dynamically generated
+        #it would be challenging to handle the updates
+
+        editForm = QFormLayout()
+
+        self.frontText = QTextEdit()
+        self.frontText.textChanged.connect(self.makeChanges)
+        editForm.addRow(QLabel('Front text'), self.frontText)
+
+        self.backText = QTextEdit()
+        self.backText.textChanged.connect(self.makeChanges)
+        editForm.addRow(QLabel('Back text'), self.backText)
+
+        #TODO: file browser for selecting an image
+
+        editArea.setLayout(editForm)
+
+        editSplit.addWidget(editArea)
+
+        saveChangesDialog = QDialogButtonBox(QDialogButtonBox.Save | QDialogButtonBox.Discard)
+        saveChangesDialog.accepted.connect(self.save)
+        saveChangesDialog.rejected.connect(self.reject)
+
+        editSplit.addWidget(saveChangesDialog)
+
+        editSplit.addStretch(1)
+
+        #TODO: add drag/drop components (maybe)
+        #could be something else
+
+        row.addLayout(editSplit)
+
+        row.addStretch(1)
+
+        self.fullLayout.addLayout(row)
+
+        self.fullLayout.addStretch(1)
 
         self.setLayout(self.fullLayout)
 
@@ -68,13 +118,24 @@ class EditStack(QWidget):
 
     #save changes to database
     def save(self):
+        #TODO: save to datbase
         self.unsavedChanges = False
 
-    #the MainMenu needs to be opened on close
-    #edits need to be checked to unsure nothing is unsaved
-    def closeEvent(self, event):
-        close = True
+    def reject(self):
+        #TODO: reload data from database
+        self.unsavedChanges = False
 
+    #sets the unsavedChanges flag
+    #a method is needed because assignment isn't allowed inside of lambda
+    #this method is called whenever the textboxes are modified
+    @pyqtSlot()
+    def makeChanges(self):
+        self.unsavedChanges = True
+
+    #check if the content has been saved
+    #and save it if the user choses to
+    #returns whether it is OK to exit
+    def checkSaved(self):
         if self.unsavedChanges:
             reply = QMessageBox.question(self, 'Unsaved changes',
                 'Would you like to save your changes?',
@@ -83,8 +144,19 @@ class EditStack(QWidget):
             if reply == QMessageBox.Save:
                 self.save()
             elif reply == QMessageBox.Cancel:
-                event.ignore()
-                return
+                return False
+
+        return True
+
+
+    #the MainMenu needs to be opened on close
+    #edits need to be checked to unsure nothing is unsaved
+    def closeEvent(self, event):
+        close = True
+
+        if not self.checkSaved():
+            event.ignore()
+            return
 
         openMainMenu(self)
         event.accept()
