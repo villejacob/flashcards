@@ -84,7 +84,7 @@ class MainMenu(QWidget):
 
         #get rows from database
         rows = select_all_stacks(self.DBConnection)
-        stacks = [row[0] for row in rows] #get stackIDs from rows
+        stacks = [row[1] for row in rows] #get stackIDs from rows
 
         self.fullList = QVBoxLayout()
 
@@ -96,8 +96,12 @@ class MainMenu(QWidget):
         for stack in stacks:
             row = QHBoxLayout()
 
-            row.addStretch(1)
+            row.addStretch(0.5)
 
+            stackname = QLabel(str(stack))
+            row.addWidget(stackname)
+
+            row.addStretch(1)
             image = ImagePreview()
             
             row.addWidget(image)
@@ -107,6 +111,8 @@ class MainMenu(QWidget):
             #note: the "check" parameter is needed in the lambda as it
             #is passed by the clicked event (it is a boolean signifying if
             # the button has been checked, if checkable)
+
+            #Display stack ID
 
             #create study button
             study = QPushButton('Study')
