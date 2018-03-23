@@ -28,9 +28,11 @@ def create_table(conn, create_table_sql):
         print(e)
 
 
-def create_stack(conn, stack):
+# Stacks
+
+def create_stack(conn, name):
     cur = conn.cursor()
-    cur.execute(sql_insert_stack, stack)
+    cur.execute(sql_insert_stack, (name,))
     conn.commit()
     return cur.lastrowid
 
@@ -44,8 +46,18 @@ def delete_stack(conn, stack_id):
 def select_all_stacks(conn):
     cur = conn.cursor()
     cur.execute("SELECT * FROM stacks")
+    return cur.fetchall()
 
-    rows = cur.fetchall()
 
-    for row in rows:
-        print(row)
+# Cards
+
+def create_card(conn, stack_id):
+    cur = conn.cursor()
+    cur.execute(sql_insert_card, (stack_id,))
+    card_id = cur.lastrowid
+
+    cur.execute(sql_insert_question, (card_id,))
+    cur.execute(sql_insert_answer, (card_id,))
+    conn.commit()
+
+    return card_id

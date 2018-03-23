@@ -1,4 +1,5 @@
 # Create tables
+
 sql_create_stacks_table = '''
     CREATE TABLE IF NOT EXISTS stacks (
         id integer PRIMARY KEY,
@@ -45,11 +46,35 @@ sql_create_assets_table = '''
 
 
 # Stacks
+
 sql_insert_stack = '''
     INSERT INTO stacks(name, last_reviewed)
-    VALUES(?,?)
+    VALUES(?,NULL)
     '''
 
 sql_delete_stack = '''
     DELETE FROM stacks WHERE id=?"
+    '''
+
+
+# Cards
+
+sql_insert_card = '''
+    INSERT INTO cards(stack_id)
+    VALUES(?)
+    '''
+
+
+# Questions
+
+sql_insert_question = '''
+    INSERT INTO questions(card_id)
+    VALUES(?)
+    '''
+
+# Answers
+
+sql_insert_answer = '''
+    INSERT INTO answers(card_id)
+    VALUES(?)
     '''
