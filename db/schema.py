@@ -11,7 +11,7 @@ sql_create_cards_table = '''
     CREATE TABLE IF NOT EXISTS cards (
         id integer PRIMARY KEY,
         stack_id integer NOT NULL,
-        FOREIGN KEY (stack_id) REFERENCES stacks (id)
+        FOREIGN KEY (stack_id) REFERENCES stacks(id)
     ); '''
 
 sql_create_questions_table = '''
@@ -68,6 +68,10 @@ sql_delete_card = '''
     DELETE FROM cards WHERE id=?
     '''
 
+sql_delete_card_by_stack_id = '''
+    DELETE FROM cards WHERE stack_id=?
+    '''
+
 
 # Questions
 
@@ -76,11 +80,20 @@ sql_insert_question = '''
     VALUES(?)
     '''
 
+sql_delete_question_by_card_id = '''
+    DELETE FROM questions WHERE card_id=?
+    '''
+
+
 # Answers
 
 sql_insert_answer = '''
     INSERT INTO answers(card_id)
     VALUES(?)
+    '''
+
+sql_delete_answer_by_card_id = '''
+    DELETE FROM answers WHERE card_id=?
     '''
 
 

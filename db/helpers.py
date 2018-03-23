@@ -4,8 +4,7 @@ from db.schema import *
 
 def create_connection(db_file):
     try:
-        conn = sqlite3.connect(db_file)
-        return conn
+        return sqlite3.connect(db_file)
     except Error as e:
         print(e)
 
@@ -22,8 +21,8 @@ def initialize_tables(conn):
 
 def create_table(conn, create_table_sql):
     try:
-        c = conn.cursor()
-        c.execute(create_table_sql)
+        cur = conn.cursor()
+        cur.execute(create_table_sql)
     except Error as e:
         print(e)
 
@@ -40,6 +39,7 @@ def create_stack(conn, name):
 def delete_stack(conn, stack_id):
     cur = conn.cursor()
     cur.execute(sql_delete_stack, (stack_id,))
+    cur.execute(sql_delete_card_by_stack_id, (stack_id,))
     conn.commit()
 
 
@@ -66,6 +66,8 @@ def create_card(conn, stack_id):
 def delete_card(conn, card_id):
     cur = conn.cursor()
     cur.execute(sql_delete_card, (card_id,))
+    cur.execute(sql_delete_question_by_card_id, (card_id,))
+    cur.execute(sql_delete_answer_by_card_id, (card_id,))
     conn.commit()
 
 

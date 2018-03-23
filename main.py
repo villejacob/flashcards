@@ -29,6 +29,7 @@ def main():
         menu.create()
 
     #wait for application to exit
+    conn.close()
     sys.exit(application.exec_())
 
 
