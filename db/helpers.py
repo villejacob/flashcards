@@ -32,6 +32,12 @@ def create_stack(conn, stack):
     return cur.lastrowid
 
 
+def delete_stack(conn, stack_id):
+    cur = conn.cursor()
+    cur.execute("DELETE FROM stacks WHERE id=?", (stack_id,))
+    conn.commit()
+
+
 def select_all_stacks(conn):
     cur = conn.cursor()
     cur.execute("SELECT * FROM stacks")
