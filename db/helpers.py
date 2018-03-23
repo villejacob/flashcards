@@ -15,6 +15,9 @@ def create_connection(db_file):
 def initialize_tables(conn):
     create_table(conn, sql_create_stacks_table)
     create_table(conn, sql_create_cards_table)
+    create_table(conn, sql_create_questions_table)
+    create_table(conn, sql_create_answers_table)
+    create_table(conn, sql_create_assets_table)
 
 
 def create_table(conn, create_table_sql):
@@ -34,7 +37,7 @@ def create_stack(conn, stack):
 
 def delete_stack(conn, stack_id):
     cur = conn.cursor()
-    cur.execute("DELETE FROM stacks WHERE id=?", (stack_id,))
+    cur.execute(sql_delete_stack, (stack_id,))
     conn.commit()
 
 

@@ -1,3 +1,4 @@
+# Create tables
 sql_create_stacks_table = '''
     CREATE TABLE IF NOT EXISTS stacks (
         id integer PRIMARY KEY,
@@ -12,7 +13,43 @@ sql_create_cards_table = '''
         FOREIGN KEY (stack_id) REFERENCES stacks (id)
     ); '''
 
+sql_create_questions_table = '''
+    CREATE TABLE IF NOT EXISTS questions (
+        id integer PRIMARY KEY,
+        card_id integer NOT NULL,
+        FOREIGN KEY (card_id) REFERENCES cards (id)
+    ); '''
+
+sql_create_answers_table = '''
+    CREATE TABLE IF NOT EXISTS answers (
+        id integer PRIMARY KEY,
+        card_id integer NOT NULL,
+        FOREIGN KEY (card_id) REFERENCES cards (id)
+    ); '''
+
+sql_create_assets_table = '''
+    CREATE TABLE IF NOT EXISTS assets (
+        id integer PRIMARY KEY,
+        question_id integer,
+        answer_id integer,
+        type text NOT NULL,
+        content text,
+        filename text,
+        left real NOT NULL,
+        top real NOT NULL,
+        width real,
+        height real,
+        FOREIGN KEY (question_id) REFERENCES questions (id),
+        FOREIGN KEY (answer_id) REFERENCES answers (id)
+    ); '''
+
+
+# Stacks
 sql_insert_stack = '''
     INSERT INTO stacks(name, last_reviewed)
     VALUES(?,?)
+    '''
+
+sql_delete_stack = '''
+    DELETE FROM stacks WHERE id=?"
     '''
