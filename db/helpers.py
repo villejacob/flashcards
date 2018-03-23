@@ -63,6 +63,12 @@ def create_card(conn, stack_id):
     return card_id
 
 
+def delete_card(conn, card_id):
+    cur = conn.cursor()
+    cur.execute(sql_delete_card, (card_id,))
+    conn.commit()
+
+
 # Assets
 
 def create_asset(conn, asset):
@@ -70,3 +76,9 @@ def create_asset(conn, asset):
     cur.execute(sql_insert_asset, asset)
     conn.commit()
     return cur.lastrowid
+
+
+def delete_asset(conn, asset_id):
+    cur = conn.cursor()
+    cur.execute(sql_delete_asset, (asset_id,))
+    conn.commit()

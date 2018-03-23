@@ -53,7 +53,7 @@ sql_insert_stack = '''
     '''
 
 sql_delete_stack = '''
-    DELETE FROM stacks WHERE id=?"
+    DELETE FROM stacks WHERE id=?
     '''
 
 
@@ -62,6 +62,10 @@ sql_delete_stack = '''
 sql_insert_card = '''
     INSERT INTO cards(stack_id)
     VALUES(?)
+    '''
+
+sql_delete_card = '''
+    DELETE FROM cards WHERE id=?
     '''
 
 
@@ -86,4 +90,8 @@ sql_insert_asset = '''
     INSERT INTO assets(question_id, answer_id, type, content, filename, left,
     top, width, height)
     VALUES(?,?,?,?,?,?,?,?,?)
+    '''
+
+sql_delete_asset = '''
+    DELETE FROM assets WHERE id=?
     '''
