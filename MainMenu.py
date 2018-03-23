@@ -97,7 +97,8 @@ class MainMenu(QWidget):
             row = QHBoxLayout()
 
             row.addStretch(0.5)
-
+            
+            #Display stack ID
             stackname = QLabel(str(stack))
             row.addWidget(stackname)
 
@@ -112,7 +113,7 @@ class MainMenu(QWidget):
             #is passed by the clicked event (it is a boolean signifying if
             # the button has been checked, if checkable)
 
-            #Display stack ID
+            
 
             #create study button
             study = QPushButton('Study')
