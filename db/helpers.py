@@ -61,3 +61,12 @@ def create_card(conn, stack_id):
     conn.commit()
 
     return card_id
+
+
+# Assets
+
+def create_asset(conn, asset):
+    cur = conn.cursor()
+    cur.execute(sql_insert_asset, asset)
+    conn.commit()
+    return cur.lastrowid

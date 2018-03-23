@@ -78,3 +78,12 @@ sql_insert_answer = '''
     INSERT INTO answers(card_id)
     VALUES(?)
     '''
+
+
+# Assets
+
+sql_insert_asset = '''
+    INSERT INTO assets(question_id, answer_id, type, content, filename, left,
+    top, width, height)
+    VALUES(?,?,?,?,?,?,?,?,?)
+    '''
