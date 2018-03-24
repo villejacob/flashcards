@@ -84,7 +84,8 @@ class MainMenu(QWidget):
 
         #get rows from database
         rows = select_all_stacks(self.DBConnection)
-        stacks = [row[1] for row in rows] #get stackIDs from rows
+        stacks = [row[0] for row in rows] #get stackIDs from rows
+        stacknames = [row[1] for row in rows] 
 
         self.fullList = QVBoxLayout()
 
@@ -99,7 +100,7 @@ class MainMenu(QWidget):
             row.addStretch(0.5)
             
             #Display stack ID
-            stackname = QLabel(str(stack))
+            stackname = QLabel(str(stacknames[stack-1]))
             row.addWidget(stackname)
 
             row.addStretch(1)
