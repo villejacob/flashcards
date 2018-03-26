@@ -48,6 +48,13 @@ class MainMenu(QWidget):
     @pyqtSlot()
     def onDeleteClick(self, stackID):
         print('Deleting Stack ' + str(stackID))
+        delete_stack(self.DBConnection, stackID)
+
+        #create a new widget and apply the current layout to it
+        #this removes the reference so that the layout will be
+        #garbage collected
+        QWidget().setLayout(self.layout())
+        self.create() #redraw on add
         #TODO: delete stack from database
 
     @pyqtSlot()
@@ -66,7 +73,7 @@ class MainMenu(QWidget):
         #dialog is closed
         if okPressed:
             print('New Stack: ' + text)
-            create_stack(self.DBConnection, (text, 'never'))
+            create_stack(self.DBConnection, text)
 
             #create a new widget and apply the current layout to it
             #this removes the reference so that the layout will be
@@ -85,7 +92,7 @@ class MainMenu(QWidget):
         #get rows from database
         rows = select_all_stacks(self.DBConnection)
         stacks = [row[0] for row in rows] #get stackIDs from rows
-        stacknames = [row[1] for row in rows] 
+        stacknames = [row[1] for row in rows] #get stacknames from rows
 
         self.fullList = QVBoxLayout()
 
@@ -94,15 +101,17 @@ class MainMenu(QWidget):
         #adds the elements for each stack to them, each of these hboxes is then
         #added to vertical box (QVBoxLayout) created above to create the overall
         #layout
+        i = 0
         for stack in stacks:
             row = QHBoxLayout()
 
             row.addStretch(0.5)
             
             #Display stack ID
-            stackname = QLabel(str(stacknames[stack-1]))
+            stackname = QLabel(str(stacknames[i]))
+            i += 1
             row.addWidget(stackname)
-
+            
             row.addStretch(1)
             image = ImagePreview()
             
