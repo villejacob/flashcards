@@ -29,8 +29,9 @@ def main():
         menu.create()
 
     #wait for application to exit
+    exitCode = application.exec_()
     conn.close()
-    sys.exit(application.exec_())
+    sys.exit(exitCode)
 
 
 if __name__ == "__main__":
