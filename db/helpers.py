@@ -85,3 +85,4 @@ def delete_asset(conn, asset_id):
     cur = conn.cursor()
     cur.execute(sql_delete_asset, (asset_id,))
     conn.commit()
+
