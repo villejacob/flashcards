@@ -1,3 +1,4 @@
+
 import sqlite3
 from sqlite3 import Error
 from db.schema import *

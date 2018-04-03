@@ -108,3 +108,44 @@ sql_insert_asset = '''
 sql_delete_asset = '''
     DELETE FROM assets WHERE id=?
     '''
+
+sql_delete_card_by_stack_id = '''
+    DELETE FROM cards WHERE stack_id=?
+    '''
+
+
+# Questions
+
+sql_insert_question = '''
+    INSERT INTO questions(card_id)
+    VALUES(?)
+    '''
+
+sql_delete_question_by_card_id = '''
+    DELETE FROM questions WHERE card_id=?
+    '''
+
+
+# Answers
+
+sql_insert_answer = '''
+    INSERT INTO answers(card_id)
+    VALUES(?)
+    '''
+
+sql_delete_answer_by_card_id = '''
+    DELETE FROM answers WHERE card_id=?
+    '''
+
+
+# Assets
+
+sql_insert_asset = '''
+    INSERT INTO assets(question_id, answer_id, type, content, filename, left,
+    top, width, height)
+    VALUES(?,?,?,?,?,?,?,?,?)
+    '''
+
+sql_delete_asset = '''
+    DELETE FROM assets WHERE id=?
+    '''
