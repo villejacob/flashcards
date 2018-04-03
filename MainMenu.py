@@ -66,7 +66,7 @@ class MainMenu(QWidget):
         #dialog is closed
         if okPressed:
             print('New Stack: ' + text)
-            create_stack(self.DBConnection, (text, 'never'))
+            create_stack(self.DBConnection, text)
 
             #create a new widget and apply the current layout to it
             #this removes the reference so that the layout will be
@@ -85,7 +85,7 @@ class MainMenu(QWidget):
         #get rows from database
         rows = select_all_stacks(self.DBConnection)
         stacks = [row[0] for row in rows] #get stackIDs from rows
-        stacknames = [row[1] for row in rows] 
+        stacknames = [row[1] for row in rows]
 
         self.fullList = QVBoxLayout()
 
@@ -98,14 +98,14 @@ class MainMenu(QWidget):
             row = QHBoxLayout()
 
             row.addStretch(0.5)
-            
+
             #Display stack ID
             stackname = QLabel(str(stacknames[stack-1]))
             row.addWidget(stackname)
 
             row.addStretch(1)
             image = ImagePreview()
-            
+
             row.addWidget(image)
 
             row.addStretch(5)
@@ -114,7 +114,7 @@ class MainMenu(QWidget):
             #is passed by the clicked event (it is a boolean signifying if
             # the button has been checked, if checkable)
 
-            
+
 
             #create study button
             study = QPushButton('Study')
