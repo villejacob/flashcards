@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from CommonGUIComponents import *
+from db.helpers import *
 
 class EditStack(QWidget):
 
@@ -9,6 +10,9 @@ class EditStack(QWidget):
         self.stackID = stackID
         self.mainMenu = mainMenu
         self.unsavedChanges = False
+
+        #TODO: get first card in stack
+        self.switchToCard(0)
 
         super().__init__()
 
@@ -33,6 +37,43 @@ class EditStack(QWidget):
             return
         self.hide()
         openViewWindow(self)
+
+    @pyqtSlot()
+    def selectImageFile(self):
+        #TODO: update with accepted image files
+        fileName = self.selectFile("Select Image", "Image Files (*.png;*.bmp;*.jpg;*.jpeg)")
+        if fileName and fileName != self.imageLocation:
+            self.makeChanges()
+            self.imageLocation = fileName
+
+    @pyqtSlot()
+    def selectVideoFile(self):
+        #TODO: update with accepted video files
+        fileName = self.selectFile("Select Video", "Video Files (*.avi;*.mp4;*.flv)")
+        if fileName and fileName != self.videoLocation:
+            self.makeChanges()
+            self.videoLocation = fileName
+
+    @pyqtSlot()
+    def selectAudioFile(self):
+        #TODO: update with accepted audio files
+        fileName = self.selectFile("Select Audio", "Audio Files (*.mp3)")
+        if fileName and fileName != self.audioLocation:
+            self.makeChanges()
+            self.audioLocation = fileName
+
+
+    def selectFile(self, title, fileOptions):
+        fileName, _ = QFileDialog.getOpenFileName(self, title, "", fileOptions)
+        return fileName
+
+    #switches window to editing a specific card
+    def switchToCard(self, cardID):
+        self.cardID = cardID
+        #TODO: get data from database
+        self.imageLocation = ""
+        self.videoLocation = ""
+        self.audioLocation = ""
 
     def create(self):
 
@@ -93,7 +134,20 @@ class EditStack(QWidget):
         self.backText.textChanged.connect(self.makeChanges)
         editForm.addRow(QLabel('Back text'), self.backText)
 
-        #TODO: file browser for selecting an image
+        #image file browser
+        selectImage = QPushButton('Browse')
+        selectImage.clicked.connect(self.selectImageFile)
+        editForm.addRow(QLabel('Select Image'), selectImage)
+
+        #video file browser
+        selectVideo = QPushButton('Browse')
+        selectVideo.clicked.connect(self.selectVideoFile)
+        editForm.addRow(QLabel('Select Video'), selectVideo)
+
+        #audio file browser
+        selectAudio = QPushButton('Browse')
+        selectAudio.clicked.connect(self.selectAudioFile)
+        editForm.addRow(QLabel('Select Audio'), selectAudio)
 
         editArea.setLayout(editForm)
 
