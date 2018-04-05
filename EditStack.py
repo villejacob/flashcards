@@ -60,10 +60,19 @@ class EditStack(QWidget):
             self.makeChanges()
             self.audioLocation = fileName
 
+    @pyqtSlot()
+    def addCard(self):
+        cid = create_card(self.DBConnection, self.stackID)
+
+        #start editing new card
+        self.switchToCard(cid)
 
     def selectFile(self, title, fileOptions):
         fileName, _ = QFileDialog.getOpenFileName(self, title, "", fileOptions)
         return fileName
+
+    def reloadCard(self):
+        self.switchToCard(self.cardID)
 
     #switches window to editing a specific card
     def switchToCard(self, cardID):
@@ -71,6 +80,8 @@ class EditStack(QWidget):
         dbData = select_assets_by_card_id(self.DBConnection, self.cardID)
         print(dbData)
 
+        #key is asset type
+        #value is (id, content, filename)
         self.assetDict = {row[1]: (row[0], row[2], row[3],) for row in dbData}
 
         self.frontText.setPlainText(self.assetDict.get('question', ('', '', ''))[1])
@@ -99,9 +110,9 @@ class EditStack(QWidget):
         row.addStretch(1)
 
         #create button for new card
-        newcard = QPushButton('Add Card')
-
-        row.addWidget(newcard)
+        newCard = QPushButton('Add Card')
+        newCard.clicked.connect(self.addCard)
+        row.addWidget(newCard)
 
         row.addStretch(1)
 
@@ -186,11 +197,31 @@ class EditStack(QWidget):
 
     #save changes to database
     def save(self):
-        #TODO: save to datbase
+        #check each field to make sure it has an entry in the db
+        if 'question' in self.assetDict:
+            aid = self.assetDict['question']
+            update_asset(self.DBConnection, aid, self.frontText.toPlainText(), None)
+
+        if 'answer' in self.assetDict:
+            aid = self.assetDict['answer']
+            update_asset(self.DBConnection, aid, self.backText.toPlainText(), None)
+
+        if 'image' in self.assetDict:
+            aid = self.assetDict['image']
+            update_asset(self.DBConnection, aid, None, self.imageLocation)
+
+        if 'video' in self.assetDict:
+            aid = self.assetDict['video']
+            update_asset(self.DBConnection, aid, None, self.videoLocation)
+
+        if 'audio' in self.assetDict:
+            aid = self.assetDict['audio']
+            update_asset(self.DBConnection, aid, None, self.audioLocation)
+
         self.unsavedChanges = False
 
     def reject(self):
-        #TODO: reload data from database
+        self.reloadCard()
         self.unsavedChanges = False
 
     #sets the unsavedChanges flag

@@ -92,6 +92,9 @@ def create_asset(conn, asset):
     conn.commit()
     return cur.lastrowid
 
+def update_asset(conn, asset_id, content, filename):
+    cur = conn.cursor()
+    cur.execute(sql_update_asset, (content, filename, asset_id,))
 
 def delete_asset(conn, asset_id):
     cur = conn.cursor()

@@ -105,6 +105,11 @@ sql_insert_asset = '''
     VALUES(?,?,?,?,?,?,?,?,?)
     '''
 
+sql_update_asset = '''UPDATE Assets
+    SET content = ? , filename = ?
+    WHERE id = ?
+    '''
+
 sql_delete_asset = '''
     DELETE FROM assets WHERE id=?
     '''
