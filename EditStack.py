@@ -39,7 +39,7 @@ class EditStack(QWidget):
     @pyqtSlot()
     def selectImageFile(self):
         #TODO: update with accepted image files
-        fileName = self.selectFile("Select Image", "Image Files (*.png;*.bmp;*.jpg;*.jpeg)")
+        fileName = self.selectFile("Select Image", "Image Files (*.png *.bmp *.jpg *.jpeg)")
         if fileName and fileName != self.imageLocation:
             self.makeChanges()
             self.imageLocation = fileName
@@ -47,7 +47,7 @@ class EditStack(QWidget):
     @pyqtSlot()
     def selectVideoFile(self):
         #TODO: update with accepted video files
-        fileName = self.selectFile("Select Video", "Video Files (*.avi;*.mp4;*.flv)")
+        fileName = self.selectFile("Select Video", "Video Files (*.avi *.mp4 *.flv)")
         if fileName and fileName != self.videoLocation:
             self.makeChanges()
             self.videoLocation = fileName
