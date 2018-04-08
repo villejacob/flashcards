@@ -153,9 +153,8 @@ class EditStack(QWidget):
 
         editSplit.addWidget(editArea)
 
-        saveChangesDialog = QDialogButtonBox(QDialogButtonBox.Save | QDialogButtonBox.Discard)
+        saveChangesDialog = QDialogButtonBox(QDialogButtonBox.Save)
         saveChangesDialog.accepted.connect(self.save)
-        saveChangesDialog.rejected.connect(self.reject)
 
         editSplit.addWidget(saveChangesDialog)
 
