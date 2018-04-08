@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from CommonGUIComponents import *
+from db.helpers import *
 
 class EditStack(QWidget):
 
