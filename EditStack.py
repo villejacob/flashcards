@@ -63,6 +63,14 @@ class EditStack(QWidget):
     @pyqtSlot()
     def addCard(self):
         cid = create_card(self.DBConnection, self.stackID)
+        qid = select_question_by_card_id(self.DBConnection, cid)
+        aid = select_answer_by_card_id(self.DBConnection, cid)
+
+        #create question and answer text assets
+        create_asset(self.DBConnection,
+            (qid, None, 'question', '', None, 0, 0, 0, 0))
+        create_asset(self.DBConnection,
+            (None, aid, 'answer', '', None, 0, 0, 0, 0))
 
         #start editing new card
         self.switchToCard(cid)
@@ -191,7 +199,7 @@ class EditStack(QWidget):
         self.setLayout(self.fullLayout)
 
         #TODO: get first card in stack
-        self.switchToCard(0)
+        self.switchToCard(1)
 
         self.show()
 
@@ -199,23 +207,23 @@ class EditStack(QWidget):
     def save(self):
         #check each field to make sure it has an entry in the db
         if 'question' in self.assetDict:
-            aid = self.assetDict['question']
+            aid = self.assetDict['question'][0]
             update_asset(self.DBConnection, aid, self.frontText.toPlainText(), None)
 
         if 'answer' in self.assetDict:
-            aid = self.assetDict['answer']
+            aid = self.assetDict['answer'][0]
             update_asset(self.DBConnection, aid, self.backText.toPlainText(), None)
 
         if 'image' in self.assetDict:
-            aid = self.assetDict['image']
+            aid = self.assetDict['image'][0]
             update_asset(self.DBConnection, aid, None, self.imageLocation)
 
         if 'video' in self.assetDict:
-            aid = self.assetDict['video']
+            aid = self.assetDict['video'][0]
             update_asset(self.DBConnection, aid, None, self.videoLocation)
 
         if 'audio' in self.assetDict:
-            aid = self.assetDict['audio']
+            aid = self.assetDict['audio'][0]
             update_asset(self.DBConnection, aid, None, self.audioLocation)
 
         self.unsavedChanges = False

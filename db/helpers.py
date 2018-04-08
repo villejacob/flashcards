@@ -75,14 +75,14 @@ def delete_card(conn, card_id):
 def select_question_by_card_id(conn, card_id):
     cur = conn.cursor()
     cur.execute("SELECT id FROM questions WHERE card_id=?", (card_id,))
-    return cur.fetchall()
+    return cur.fetchone()[0]
 
 # Answers
 
 def select_answer_by_card_id(conn, card_id):
     cur = conn.cursor()
     cur.execute("SELECT id FROM answers WHERE card_id=?", (card_id,))
-    return cur.fetchall()
+    return cur.fetchone()[0]
 
 # Assets
 
@@ -95,6 +95,7 @@ def create_asset(conn, asset):
 def update_asset(conn, asset_id, content, filename):
     cur = conn.cursor()
     cur.execute(sql_update_asset, (content, filename, asset_id,))
+    conn.commit()
 
 def delete_asset(conn, asset_id):
     cur = conn.cursor()

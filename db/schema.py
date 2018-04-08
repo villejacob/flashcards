@@ -115,7 +115,7 @@ sql_delete_asset = '''
     '''
 
 sql_select_assets_by_card_id = '''SELECT DISTINCT a.id, a.type, a.content, a.filename FROM assets a
-    INNER JOIN questions q ON q.id = a.question_id
-    INNER JOIN answers ans ON ans.id = a.question_id
+    LEFT JOIN questions q ON q.id = a.question_id
+    LEFT JOIN answers ans ON ans.id = a.answer_id
     INNER JOIN cards c ON c.id = q.card_id OR c.id = ans.card_id
     WHERE c.id = ?'''
