@@ -13,9 +13,6 @@ def main():
 
     initialize_tables(conn)
 
-    #debuging output to see the current set of stacks
-    select_all_stacks(conn)
-
     #create the application
     application = QApplication(sys.argv)
 

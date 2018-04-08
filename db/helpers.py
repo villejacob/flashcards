@@ -43,7 +43,7 @@ def delete_stack(conn, stack_id):
     conn.commit()
 
 
-def select_all_stacks(conn):
+def get_stacks(conn):
     cur = conn.cursor()
     cur.execute("SELECT * FROM stacks")
     return cur.fetchall()

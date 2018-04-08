@@ -86,7 +86,7 @@ class MainMenu(QWidget):
         self.editButtons = []
         self.deleteButtons = []
 
-        stacks = select_all_stacks(self.DBConnection)
+        stacks = get_stacks(self.DBConnection)
 
         self.fullList = QVBoxLayout()
 
