@@ -11,6 +11,7 @@ def main():
     # connect to the db
     conn = create_connection("db/flashcards.db")
 
+    # create db tables
     initialize_tables(conn)
 
     #create the application

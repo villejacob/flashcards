@@ -68,7 +68,11 @@ sql_delete_card = '''
     DELETE FROM cards WHERE id=?
     '''
 
-sql_delete_card_by_stack_id = '''
+sql_select_stack_cards = '''
+    SELECT * FROM cards WHERE stack_id=?
+    '''
+
+sql_delete_stack_cards = '''
     DELETE FROM cards WHERE stack_id=?
     '''
 
@@ -80,7 +84,7 @@ sql_insert_question = '''
     VALUES(?)
     '''
 
-sql_delete_question_by_card_id = '''
+sql_delete_card_questions = '''
     DELETE FROM questions WHERE card_id=?
     '''
 
@@ -92,7 +96,7 @@ sql_insert_answer = '''
     VALUES(?)
     '''
 
-sql_delete_answer_by_card_id = '''
+sql_delete_card_answers = '''
     DELETE FROM answers WHERE card_id=?
     '''
 

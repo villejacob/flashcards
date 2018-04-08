@@ -1,6 +1,6 @@
 import sqlite3
 from sqlite3 import Error
-from db.schema import *
+from db.sql import *
 
 def create_connection(db_file):
     try:
@@ -39,7 +39,7 @@ def create_stack(conn, name):
 def delete_stack(conn, stack_id):
     cur = conn.cursor()
     cur.execute(sql_delete_stack, (stack_id,))
-    cur.execute(sql_delete_card_by_stack_id, (stack_id,))
+    cur.execute(sql_delete_stack_cards, (stack_id,))
     conn.commit()
 
 
@@ -66,9 +66,15 @@ def create_card(conn, stack_id):
 def delete_card(conn, card_id):
     cur = conn.cursor()
     cur.execute(sql_delete_card, (card_id,))
-    cur.execute(sql_delete_question_by_card_id, (card_id,))
-    cur.execute(sql_delete_answer_by_card_id, (card_id,))
+    cur.execute(sql_delete_card_questions, (card_id,))
+    cur.execute(sql_delete_card_answers, (card_id,))
     conn.commit()
+
+
+def get_stack_cards(conn, stack_id):
+    cur = conn.cursor()
+    cur.execute(sql_select_stack_cards, (stack_id,))
+    return cur.fetchall()
 
 
 # Assets
