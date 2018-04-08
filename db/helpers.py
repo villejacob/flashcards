@@ -70,6 +70,19 @@ def delete_card(conn, card_id):
     cur.execute(sql_delete_answer_by_card_id, (card_id,))
     conn.commit()
 
+# Questions
+
+def select_question_by_card_id(conn, card_id):
+    cur = conn.cursor()
+    cur.execute("SELECT id FROM questions WHERE card_id=?", (card_id,))
+    return cur.fetchall()
+
+# Answers
+
+def select_answer_by_card_id(conn, card_id):
+    cur = conn.cursor()
+    cur.execute("SELECT id FROM answers WHERE card_id=?", (card_id,))
+    return cur.fetchall()
 
 # Assets
 
