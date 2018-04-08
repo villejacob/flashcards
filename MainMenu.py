@@ -1,9 +1,9 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
+from db.helpers import *
 from ImagePreview import *
 from ViewStack import *
 from EditStack import *
-from db.helpers import *
 
 
 class MainMenu(QWidget):

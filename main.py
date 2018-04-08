@@ -2,7 +2,6 @@
 
 import sys
 from PyQt5.QtWidgets import QApplication
-#from db.helpers import *
 from MainMenu import *
 from ViewStack import *
 from EditStack import *
