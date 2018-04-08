@@ -5,16 +5,17 @@ from db.helpers import *
 
 class EditStack(QWidget):
 
-    def __init__(self, mainMenu=None, stackID=None,
+    def __init__(self, mainMenu=None, DBConnection = None, stackID=None,
                     pos = QPoint(300, 300), size = QSize(250, 150)):
         self.stackID = stackID
         self.mainMenu = mainMenu
         self.unsavedChanges = False
+        self.DBConnection = DBConnection
+
+        super().__init__()
 
         #TODO: get first card in stack
         self.switchToCard(0)
-
-        super().__init__()
 
         #set size and position
         #usually passed in by constructor from
@@ -70,7 +71,10 @@ class EditStack(QWidget):
     #switches window to editing a specific card
     def switchToCard(self, cardID):
         self.cardID = cardID
-        #TODO: get data from database
+        dbData = select_assets_by_card_id(self.DBConnection, self.cardID)
+        print(dbData)
+
+        #TODO: use data from database
         self.imageLocation = ""
         self.videoLocation = ""
         self.audioLocation = ""

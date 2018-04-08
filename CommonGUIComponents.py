@@ -16,7 +16,7 @@ def openEditWindow(curWindow):
     #NOTE: needs to imported like this because
     #of circular dependencies
     import EditStack
-    curWindow.mainMenu.es = EditStack.EditStack(curWindow.mainMenu,
+    curWindow.mainMenu.es = EditStack.EditStack(curWindow.mainMenu, curWindow.DBConnection,
             curWindow.stackID, curWindow.pos(), curWindow.size())
     curWindow.mainMenu.es.create()
 
@@ -24,7 +24,7 @@ def openViewWindow(curWindow):
     #NOTE: needs to imported like this because
     #of circular dependencies
     import ViewStack
-    curWindow.mainMenu.vs = ViewStack.ViewStack(curWindow.mainMenu,
+    curWindow.mainMenu.vs = ViewStack.ViewStack(curWindow.mainMenu, curWindow.DBConnection,
             curWindow.stackID, curWindow.pos(), curWindow.size())
     curWindow.mainMenu.vs.create()
 

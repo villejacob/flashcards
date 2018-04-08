@@ -85,3 +85,7 @@ def delete_asset(conn, asset_id):
     cur.execute(sql_delete_asset, (asset_id,))
     conn.commit()
 
+def select_assets_by_card_id(conn, card_id):
+    cur = conn.cursor()
+    cur.execute(sql_select_assets_by_card_id, (card_id,))
+    return cur.fetchall()

@@ -108,3 +108,9 @@ sql_insert_asset = '''
 sql_delete_asset = '''
     DELETE FROM assets WHERE id=?
     '''
+
+sql_select_assets_by_card_id = '''SELECT DISTINCT type, content, filename FROM assets a
+    INNER JOIN questions q ON q.id = a.question_id
+    INNER JOIN answers ans ON ans.id = a.question_id
+    INNER JOIN cards c ON c.id = q.card_id OR c.id = ans.card_id
+    WHERE c.id = ?'''

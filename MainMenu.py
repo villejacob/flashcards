@@ -28,7 +28,7 @@ class MainMenu(QWidget):
         self.es = None
 
         #create the view window
-        self.vs = ViewStack(self, stackID, self.pos(), self.size())
+        self.vs = ViewStack(self, self.DBConnection, stackID, self.pos(), self.size())
         self.vs.create()
         print('Studying Stack ' + str(stackID))
 
@@ -41,7 +41,7 @@ class MainMenu(QWidget):
         self.vs = None
 
         #create the edit window
-        self.es = EditStack(self, stackID, self.pos(), self.size())
+        self.es = EditStack(self, self.DBConnection, stackID, self.pos(), self.size())
         self.es.create()
         print('Editing Stack ' + str(stackID))
 
