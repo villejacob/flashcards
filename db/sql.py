@@ -2,35 +2,35 @@
 
 sql_create_stacks_table = '''
     CREATE TABLE IF NOT EXISTS stacks (
-        id integer PRIMARY KEY,
+        id integer PRIMARY KEY AUTOINCREMENT,
         name text NOT NULL,
         last_reviewed text
     ); '''
 
 sql_create_cards_table = '''
     CREATE TABLE IF NOT EXISTS cards (
-        id integer PRIMARY KEY,
+        id integer PRIMARY KEY AUTOINCREMENT,
         stack_id integer NOT NULL,
         FOREIGN KEY (stack_id) REFERENCES stacks(id)
     ); '''
 
 sql_create_questions_table = '''
     CREATE TABLE IF NOT EXISTS questions (
-        id integer PRIMARY KEY,
+        id integer PRIMARY KEY AUTOINCREMENT,
         card_id integer NOT NULL,
         FOREIGN KEY (card_id) REFERENCES cards (id)
     ); '''
 
 sql_create_answers_table = '''
     CREATE TABLE IF NOT EXISTS answers (
-        id integer PRIMARY KEY,
+        id integer PRIMARY KEY AUTOINCREMENT,
         card_id integer NOT NULL,
         FOREIGN KEY (card_id) REFERENCES cards (id)
     ); '''
 
 sql_create_assets_table = '''
     CREATE TABLE IF NOT EXISTS assets (
-        id integer PRIMARY KEY,
+        id integer PRIMARY KEY AUTOINCREMENT,
         question_id integer,
         answer_id integer,
         type text NOT NULL,
