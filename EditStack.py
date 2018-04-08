@@ -14,9 +14,6 @@ class EditStack(QWidget):
 
         super().__init__()
 
-        #TODO: get first card in stack
-        self.switchToCard(0)
-
         #set size and position
         #usually passed in by constructor from
         #the main menu
@@ -74,10 +71,15 @@ class EditStack(QWidget):
         dbData = select_assets_by_card_id(self.DBConnection, self.cardID)
         print(dbData)
 
-        #TODO: use data from database
-        self.imageLocation = ""
-        self.videoLocation = ""
-        self.audioLocation = ""
+        self.assetDict = {row[1]: (row[0], row[2], row[3],) for row in dbData}
+
+        self.frontText.setPlainText(self.assetDict.get('question', ('', '', ''))[1])
+        self.backText.setPlainText(self.assetDict.get('answer', ('', '', ''))[1])
+        self.imageLocation = self.assetDict.get('image', ('', '', ''))[2]
+        self.videoLocation = self.assetDict.get('video', ('', '', ''))[2]
+        self.audioLocation = self.assetDict.get('audio', ('', '', ''))[2]
+
+        self.unsavedChanges = False
 
     def create(self):
 
@@ -177,6 +179,8 @@ class EditStack(QWidget):
 
         self.setLayout(self.fullLayout)
 
+        #TODO: get first card in stack
+        self.switchToCard(0)
 
         self.show()
 
