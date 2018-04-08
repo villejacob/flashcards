@@ -8,8 +8,7 @@ from db.helpers import *
 
 class MainMenu(QWidget):
 
-    def __init__(self, DBConnection):
-        self.DBConnection = DBConnection
+    def __init__(self):
 
         super().__init__()
 
@@ -48,7 +47,7 @@ class MainMenu(QWidget):
     @pyqtSlot()
     def onDeleteClick(self, stackID):
         print('Deleting Stack ' + str(stackID))
-        delete_stack(self.DBConnection, stackID)
+        delete_stack(stackID)
 
         #Refresh window with deleted stack
         QWidget().setLayout(self.layout())
@@ -60,7 +59,7 @@ class MainMenu(QWidget):
 
         #create dialog box with text input for the
         #name of the stack
-        text, okPressed = QInputDialog.getText(self,
+        stackName, okPressed = QInputDialog.getText(self,
                             'Add Stack',
                             'Enter name for new stack',
                             QLineEdit.Normal, '')
@@ -69,8 +68,8 @@ class MainMenu(QWidget):
         #will be false if cancel button is pressed or the
         #dialog is closed
         if okPressed:
-            print('New Stack: ' + text)
-            create_stack(self.DBConnection, text)
+            print('New Stack: ' + stackName)
+            create_stack(stackName)
 
             #create a new widget and apply the current layout to it
             #this removes the reference so that the layout will be
@@ -86,7 +85,7 @@ class MainMenu(QWidget):
         self.editButtons = []
         self.deleteButtons = []
 
-        stacks = get_stacks(self.DBConnection)
+        stacks = get_stacks()
 
         self.fullList = QVBoxLayout()
 
