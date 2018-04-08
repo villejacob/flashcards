@@ -62,6 +62,10 @@ def create_card(conn, stack_id):
 
     return card_id
 
+def select_cards_by_stack_id(conn, stack_id):
+    cur = conn.cursor()
+    cur.execute("SELECT id FROM cards WHERE stack_id=?", (stack_id,))
+    return cur.fetchall()
 
 def delete_card(conn, card_id):
     cur = conn.cursor()

@@ -11,6 +11,7 @@ class EditStack(QWidget):
         self.mainMenu = mainMenu
         self.unsavedChanges = False
         self.DBConnection = DBConnection
+        self.cardID = None
 
         super().__init__()
 
@@ -71,6 +72,9 @@ class EditStack(QWidget):
             (qid, None, 'question', '', None, 0, 0, 0, 0))
         create_asset(self.DBConnection,
             (None, aid, 'answer', '', None, 0, 0, 0, 0))
+
+        #reload list of cards
+        self.cardIDs = select_cards_by_stack_id(self.DBConnection, self.stackID)
 
         #start editing new card
         self.switchToCard(cid)
@@ -198,13 +202,23 @@ class EditStack(QWidget):
 
         self.setLayout(self.fullLayout)
 
-        #TODO: get first card in stack
-        self.switchToCard(1)
+        self.cardIDs = select_cards_by_stack_id(self.DBConnection, self.stackID)
+
+        #check if there is at least on card and create
+        #it if there isn't
+        if len(self.cardIDs) > 0:
+            self.switchToCard(self.cardIDs[0][0])
+        else:
+            self.addCard()
 
         self.show()
 
     #save changes to database
     def save(self):
+        #don't save if a card is not loaded
+        if self.cardID is None:
+            return
+
         #check each field to make sure it has an entry in the db
         if 'question' in self.assetDict:
             aid = self.assetDict['question'][0]
