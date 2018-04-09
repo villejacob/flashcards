@@ -5,11 +5,10 @@ from db.helpers import *
 
 class ViewStack(QWidget):
 
-    def __init__(self, mainMenu=None, DBConnection = None, stackID=None,
+    def __init__(self, mainMenu=None, stackID=None,
                     pos = QPoint(300, 300), size = QSize(250, 150)):
         self.stackID = stackID
         self.mainMenu = mainMenu
-        self.DBConnection = DBConnection
 
         super().__init__()
 

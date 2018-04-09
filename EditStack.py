@@ -5,12 +5,11 @@ from db.helpers import *
 
 class EditStack(QWidget):
 
-    def __init__(self, mainMenu=None, DBConnection = None, stackID=None,
+    def __init__(self, mainMenu=None, stackID=None,
                     pos = QPoint(300, 300), size = QSize(250, 150)):
         self.stackID = stackID
         self.mainMenu = mainMenu
         self.unsavedChanges = False
-        self.DBConnection = DBConnection
         self.cardID = None
 
         super().__init__()
@@ -63,18 +62,16 @@ class EditStack(QWidget):
 
     @pyqtSlot()
     def addCard(self):
-        cid = create_card(self.DBConnection, self.stackID)
-        qid = select_question_by_card_id(self.DBConnection, cid)
-        aid = select_answer_by_card_id(self.DBConnection, cid)
+        cid = create_card(self.stackID)
+        qid = select_question_by_card_id(cid)
+        aid = select_answer_by_card_id(cid)
 
         #create question and answer text assets
-        create_asset(self.DBConnection,
-            (qid, None, 'question', '', None, 0, 0, 0, 0))
-        create_asset(self.DBConnection,
-            (None, aid, 'answer', '', None, 0, 0, 0, 0))
+        create_asset((qid, None, 'question', '', None, 0, 0, 0, 0,))
+        create_asset((None, aid, 'answer', '', None, 0, 0, 0, 0,))
 
         #reload list of cards
-        self.cardIDs = select_cards_by_stack_id(self.DBConnection, self.stackID)
+        self.cardIDs = select_cards_by_stack_id(self.stackID)
 
         #start editing new card
         self.switchToCard(cid)
@@ -89,7 +86,7 @@ class EditStack(QWidget):
     #switches window to editing a specific card
     def switchToCard(self, cardID):
         self.cardID = cardID
-        dbData = select_assets_by_card_id(self.DBConnection, self.cardID)
+        dbData = select_assets_by_card_id(self.cardID)
         print(dbData)
 
         #key is asset type
@@ -202,7 +199,7 @@ class EditStack(QWidget):
 
         self.setLayout(self.fullLayout)
 
-        self.cardIDs = select_cards_by_stack_id(self.DBConnection, self.stackID)
+        self.cardIDs = select_cards_by_stack_id(self.stackID)
 
         #check if there is at least on card and create
         #it if there isn't
@@ -222,23 +219,23 @@ class EditStack(QWidget):
         #check each field to make sure it has an entry in the db
         if 'question' in self.assetDict:
             aid = self.assetDict['question'][0]
-            update_asset(self.DBConnection, aid, self.frontText.toPlainText(), None)
+            update_asset(aid, self.frontText.toPlainText(), None)
 
         if 'answer' in self.assetDict:
             aid = self.assetDict['answer'][0]
-            update_asset(self.DBConnection, aid, self.backText.toPlainText(), None)
+            update_asset(aid, self.backText.toPlainText(), None)
 
         if 'image' in self.assetDict:
             aid = self.assetDict['image'][0]
-            update_asset(self.DBConnection, aid, None, self.imageLocation)
+            update_asset(aid, None, self.imageLocation)
 
         if 'video' in self.assetDict:
             aid = self.assetDict['video'][0]
-            update_asset(self.DBConnection, aid, None, self.videoLocation)
+            update_asset(aid, None, self.videoLocation)
 
         if 'audio' in self.assetDict:
             aid = self.assetDict['audio'][0]
-            update_asset(self.DBConnection, aid, None, self.audioLocation)
+            update_asset(aid, None, self.audioLocation)
 
         self.unsavedChanges = False
 

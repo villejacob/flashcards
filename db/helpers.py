@@ -53,10 +53,10 @@ def delete_card(card_id):
         cursor.execute(sql_delete_card_questions, (card_id,))
         cursor.execute(sql_delete_card_answers, (card_id,))
 
-def select_cards_by_stack_id(conn, stack_id):
-    cur = conn.cursor()
-    cur.execute("SELECT id FROM cards WHERE stack_id=?", (stack_id,))
-    return cur.fetchall()
+def select_cards_by_stack_id(stack_id):
+    with ConnManager() as cursor:
+        cursor.execute("SELECT id FROM cards WHERE stack_id=?", (stack_id,))
+        return cursor.fetchall()
 
 def get_stack_cards(stack_id):
     with ConnManager() as cursor:
@@ -65,17 +65,17 @@ def get_stack_cards(stack_id):
 
 # Questions
 
-def select_question_by_card_id(conn, card_id):
-    cur = conn.cursor()
-    cur.execute("SELECT id FROM questions WHERE card_id=?", (card_id,))
-    return cur.fetchone()[0]
+def select_question_by_card_id(card_id):
+    with ConnManager() as cursor:
+        cursor.execute("SELECT id FROM questions WHERE card_id=?", (card_id,))
+        return cursor.fetchone()[0]
 
 # Answers
 
-def select_answer_by_card_id(conn, card_id):
-    cur = conn.cursor()
-    cur.execute("SELECT id FROM answers WHERE card_id=?", (card_id,))
-    return cur.fetchone()[0]
+def select_answer_by_card_id(card_id):
+    with ConnManager() as cursor:
+        cursor.execute("SELECT id FROM answers WHERE card_id=?", (card_id,))
+        return cursor.fetchone()[0]
 
 # Assets
 
@@ -84,16 +84,15 @@ def create_asset(asset):
         cursor.execute(sql_insert_asset, asset)
         return cursor.lastrowid
 
-def update_asset(conn, asset_id, content, filename):
-    cur = conn.cursor()
-    cur.execute(sql_update_asset, (content, filename, asset_id,))
-    conn.commit()
+def update_asset(asset_id, content, filename):
+    with ConnManager() as cursor:
+        cursor.execute(sql_update_asset, (content, filename, asset_id,))
 
 def delete_asset(asset_id):
     with ConnManager() as cursor:
         cursor.execute(sql_delete_asset, (asset_id,))
 
-def select_assets_by_card_id(conn, card_id):
-    cur = conn.cursor()
-    cur.execute(sql_select_assets_by_card_id, (card_id,))
-    return cur.fetchall()
+def select_assets_by_card_id(card_id):
+    with ConnManager() as cursor:
+        cursor.execute(sql_select_assets_by_card_id, (card_id,))
+        return cursor.fetchall()
