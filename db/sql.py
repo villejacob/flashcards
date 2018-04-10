@@ -123,3 +123,9 @@ sql_select_assets_by_card_id = '''SELECT DISTINCT a.id, a.type, a.content, a.fil
     LEFT JOIN answers ans ON ans.id = a.answer_id
     INNER JOIN cards c ON c.id = q.card_id OR c.id = ans.card_id
     WHERE c.id = ?'''
+
+sql_select_asset_by_card_id = '''SELECT DISTINCT a.id, a.type, a.content, a.filename FROM assets a
+    LEFT JOIN questions q ON q.id = a.question_id
+    LEFT JOIN answers ans ON ans.id = a.answer_id
+    INNER JOIN cards c ON c.id = q.card_id OR c.id = ans.card_id
+    WHERE c.id = ? AND a.type = ?'''
