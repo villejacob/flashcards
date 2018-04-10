@@ -63,15 +63,15 @@ class EditStack(QWidget):
     @pyqtSlot()
     def addCard(self):
         cid = create_card(self.stackID)
-        qid = select_question_by_card_id(cid)
-        aid = select_answer_by_card_id(cid)
+        qid = get_card_question(cid)
+        aid = get_card_answer(cid)
 
         #create question and answer text assets
         create_asset((qid, None, 'question', '', None, 0, 0, 0, 0,))
         create_asset((None, aid, 'answer', '', None, 0, 0, 0, 0,))
 
         #reload list of cards
-        self.cardIDs = select_cards_by_stack_id(self.stackID)
+        self.cardIDs = get_stack_cards(self.stackID)
 
         #start editing new card
         self.switchToCard(cid)
@@ -86,7 +86,7 @@ class EditStack(QWidget):
     #switches window to editing a specific card
     def switchToCard(self, cardID):
         self.cardID = cardID
-        dbData = select_assets_by_card_id(self.cardID)
+        dbData = get_card_assets(self.cardID)
         print(dbData)
 
         #key is asset type
@@ -199,7 +199,7 @@ class EditStack(QWidget):
 
         self.setLayout(self.fullLayout)
 
-        self.cardIDs = select_cards_by_stack_id(self.stackID)
+        self.cardIDs = get_stack_cards(self.stackID)
 
         #check if there is at least on card and create
         #it if there isn't
