@@ -100,13 +100,13 @@ class MainMenu(QWidget):
 
             row = QHBoxLayout()
             row.addStretch(0.5)
-            
+
             stackNameLabel = QLabel(stackName)
             row.addWidget(stackNameLabel)
 
             row.addStretch(1)
             image = ImagePreview()
-            
+
             row.addWidget(image)
 
             row.addStretch(5)

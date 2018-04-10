@@ -53,12 +53,24 @@ def delete_card(card_id):
         cursor.execute(sql_delete_card_questions, (card_id,))
         cursor.execute(sql_delete_card_answers, (card_id,))
 
-
 def get_stack_cards(stack_id):
     with ConnManager() as cursor:
         cursor.execute(sql_select_stack_cards, (stack_id,))
         return cursor.fetchall()
 
+# Questions
+
+def get_card_question(card_id):
+    with ConnManager() as cursor:
+        cursor.execute("SELECT id FROM questions WHERE card_id=?", (card_id,))
+        return cursor.fetchone()[0]
+
+# Answers
+
+def get_card_answer(card_id):
+    with ConnManager() as cursor:
+        cursor.execute("SELECT id FROM answers WHERE card_id=?", (card_id,))
+        return cursor.fetchone()[0]
 
 # Assets
 
@@ -67,8 +79,15 @@ def create_asset(asset):
         cursor.execute(sql_insert_asset, asset)
         return cursor.lastrowid
 
+def update_asset(asset_id, content, filename):
+    with ConnManager() as cursor:
+        cursor.execute(sql_update_asset, (content, filename, asset_id,))
 
 def delete_asset(asset_id):
     with ConnManager() as cursor:
         cursor.execute(sql_delete_asset, (asset_id,))
 
+def get_card_assets(card_id):
+    with ConnManager() as cursor:
+        cursor.execute(sql_select_assets_by_card_id, (card_id,))
+        return cursor.fetchall()
