@@ -33,6 +33,16 @@ def get_stacks():
         cursor.execute("SELECT * FROM stacks")
         return cursor.fetchall()
 
+def stack_name_exists(stack_name):
+    with ConnManager() as cursor:
+        cursor.execute(sql_check_stack_exists, (stack_name,))
+
+        count = len(cursor.fetchall())
+
+        if count == 0:
+            return False
+        else:
+            return True
 
 # Cards
 

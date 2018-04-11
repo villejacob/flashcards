@@ -69,6 +69,17 @@ class MainMenu(QWidget):
         #dialog is closed
         if okPressed:
             print('New Stack: ' + stackName)
+
+            #check if stackname is empty or contains only whitespace
+            if stackName.isspace() or stackName is '':
+                return
+
+            stackName = stackName.strip()
+
+            #check if stackname exists already
+            if stack_name_exists(stackName):
+                return
+
             create_stack(stackName)
 
             #create a new widget and apply the current layout to it
