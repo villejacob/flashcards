@@ -39,7 +39,10 @@ class EditStack(QWidget):
     @pyqtSlot()
     def selectImageFile(self):
         #TODO: update with accepted image files
-        fileName = self.selectFile("Select Image", "Image Files (*.png *.bmp *.jpg *.jpeg)")
+        fileName = self.selectFile("Select Image",
+            "Image Files (*.png *.bmp *.jpg *.jpeg)",
+            self.imageLocation)
+
         if fileName and fileName != self.imageLocation:
             self.makeChanges()
             self.imageLocation = fileName
@@ -47,7 +50,10 @@ class EditStack(QWidget):
     @pyqtSlot()
     def selectVideoFile(self):
         #TODO: update with accepted video files
-        fileName = self.selectFile("Select Video", "Video Files (*.avi *.mp4 *.flv)")
+        fileName = self.selectFile("Select Video",
+            "Video Files (*.avi *.mp4 *.flv)",
+            self.videoLocation)
+
         if fileName and fileName != self.videoLocation:
             self.makeChanges()
             self.videoLocation = fileName
@@ -55,7 +61,10 @@ class EditStack(QWidget):
     @pyqtSlot()
     def selectAudioFile(self):
         #TODO: update with accepted audio files
-        fileName = self.selectFile("Select Audio", "Audio Files (*.mp3)")
+        fileName = self.selectFile("Select Audio",
+            "Audio Files (*.mp3)",
+            self.audioLocation)
+
         if fileName and fileName != self.audioLocation:
             self.makeChanges()
             self.audioLocation = fileName
@@ -76,8 +85,8 @@ class EditStack(QWidget):
         #start editing new card
         self.switchToCard(cid)
 
-    def selectFile(self, title, fileOptions):
-        fileName, _ = QFileDialog.getOpenFileName(self, title, "", fileOptions)
+    def selectFile(self, title, fileOptions, defaultFile=''):
+        fileName, _ = QFileDialog.getOpenFileName(self, title, defaultFile, fileOptions)
         return fileName
 
     def reloadCard(self):
@@ -216,6 +225,8 @@ class EditStack(QWidget):
         if self.cardID is None:
             return
 
+        answerID = get_card_answer(self.cardID)
+
         #check each field to make sure it has an entry in the db
         if 'question' in self.assetDict:
             aid = self.assetDict['question'][0]
@@ -228,14 +239,20 @@ class EditStack(QWidget):
         if 'image' in self.assetDict:
             aid = self.assetDict['image'][0]
             update_asset(aid, None, self.imageLocation)
+        elif self.imageLocation != '' and not self.imageLocation.isspace():
+            create_asset((None, answerID, 'image', None, self.imageLocation, 0, 0, 0, 0,))
 
         if 'video' in self.assetDict:
             aid = self.assetDict['video'][0]
             update_asset(aid, None, self.videoLocation)
+        elif self.videoLocation != '' and not self.videoLocation.isspace():
+            create_asset((None, answerID, 'video', None, self.videoLocation, 0, 0, 0, 0,))
 
         if 'audio' in self.assetDict:
             aid = self.assetDict['audio'][0]
             update_asset(aid, None, self.audioLocation)
+        elif self.audioLocation != '' and not self.audioLocation.isspace():
+            create_asset((None, answerID, 'audio', None, self.audioLocation, 0, 0, 0, 0,))
 
         self.unsavedChanges = False
 
