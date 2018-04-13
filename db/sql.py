@@ -56,6 +56,10 @@ sql_delete_stack = '''
     DELETE FROM stacks WHERE id=?
     '''
 
+sql_check_stack_exists = '''
+    SELECT * FROM stacks
+    WHERE name = ?
+    '''
 
 # Cards
 
