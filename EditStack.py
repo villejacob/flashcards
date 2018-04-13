@@ -141,11 +141,18 @@ class EditStack(QWidget):
 
         #TODO: list of cards
 
+        viewCards = QVBoxLayout()
+        button = QPushButton('New Card 1')
+    
+        viewCards.addWidget(button)
+     
+        row.addLayout(viewCards)
+
         row.addStretch(2)
 
         editSplit = QVBoxLayout()
 
-        editArea = QGroupBox('Edit Card')
+        editArea = QGroupBox('Edit Card')                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
 
         #this could potentially be dynamically generated
         #it would be challenging to handle the updates
