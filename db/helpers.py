@@ -91,3 +91,8 @@ def get_card_assets(card_id):
     with ConnManager() as cursor:
         cursor.execute(sql_select_assets_by_card_id, (card_id,))
         return cursor.fetchall()
+
+def get_card_asset(card_id, asset_type):
+    with ConnManager() as cursor:
+        cursor.execute(sql_select_asset_by_card_id, (card_id, asset_type,))
+        return cursor.fetchall()
