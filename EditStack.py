@@ -142,9 +142,13 @@ class EditStack(QWidget):
         #TODO: list of cards
 
         viewCards = QVBoxLayout()
-        button = QPushButton('New Card 1')
+        buttonI = QListWidget()
+        for i in range(10):
+            item = QListWidgetItem("Ex %i" % i)
+            buttonI.addItem(item)
+        #button = QPushButton('New Card 1')
     
-        viewCards.addWidget(button)
+        viewCards.addWidget(buttonI)
      
         row.addLayout(viewCards)
 
