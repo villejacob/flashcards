@@ -92,6 +92,13 @@ sql_delete_card_questions = '''
     DELETE FROM questions WHERE card_id=?
     '''
 
+sql_delete_stack_questions = '''
+    DELETE FROM questions
+    WHERE card_id IN (
+        SELECT id
+        FROM cards
+        WHERE stack_id = ?)
+    '''
 
 # Answers
 
@@ -104,6 +111,13 @@ sql_delete_card_answers = '''
     DELETE FROM answers WHERE card_id=?
     '''
 
+sql_delete_stack_answers = '''
+    DELETE FROM answers
+    WHERE card_id IN (
+        SELECT id
+        FROM cards
+        WHERE stack_id = ?)
+    '''
 
 # Assets
 
@@ -120,6 +134,20 @@ sql_update_asset = '''UPDATE Assets
 
 sql_delete_asset = '''
     DELETE FROM assets WHERE id=?
+    '''
+
+sql_delete_stack_assets = '''
+    DELETE FROM assets
+    WHERE question_id IN (
+        SELECT q.id FROM questions q
+        INNER JOIN cards c ON c.id = q.card_id
+        WHERE c.stack_id = ?
+    )
+    OR answer_id IN (
+        SELECT a.id FROM answers a
+        INNER JOIN cards c ON c.id = a.card_id
+        WHERE c.stack_id = ?
+    )
     '''
 
 sql_select_assets_by_card_id = '''SELECT DISTINCT a.id, a.type, a.content, a.filename FROM assets a
