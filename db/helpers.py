@@ -24,8 +24,11 @@ def create_stack(name):
 
 def delete_stack(stack_id):
     with ConnManager() as cursor:
-        cursor.execute(sql_delete_stack, (stack_id,))
+        cursor.execute(sql_delete_stack_assets, (stack_id, stack_id,))
+        cursor.execute(sql_delete_stack_questions, (stack_id,))
+        cursor.execute(sql_delete_stack_answers, (stack_id,))
         cursor.execute(sql_delete_stack_cards, (stack_id,))
+        cursor.execute(sql_delete_stack, (stack_id,))
 
 
 def get_stacks():
