@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtMultimedia import *
 from pathlib import Path #for checking file exist
 
-class PlaySound(QWdiget):
+class PlaySound(QWidget):
 
     wav_path = 'default' #file path
     is_exist = False #for debugging purpose

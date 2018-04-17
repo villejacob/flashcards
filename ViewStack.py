@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from CommonGUIComponents import *
 from db.helpers import *
+from PlaySound import *
 from ViewVideo import*
 
 class ViewStack(QWidget):
@@ -75,7 +76,7 @@ class ViewStack(QWidget):
         self.imageLocation = self.assetDict.get('image', ('', '', ''))[2]
         self.videoLocation = self.assetDict.get('video', ('', '', ''))[2]
         self.audioLocation = self.assetDict.get('audio', ('', '', ''))[2]
-    	
+
 
     def create(self):
 
@@ -109,12 +110,12 @@ class ViewStack(QWidget):
 
         #retrieve cards from DB
         self.cardIDs = get_stack_cards(self.stackID)
-        
+
         self.switchToCard(self.cardIDs[0][0])
-        
+
         #add row for navigation
         self.fullLayout.addLayout(row)
-        
+
         self.fullLayout.addStretch(1)
 
         if len(self.cardIDs) > 0:
