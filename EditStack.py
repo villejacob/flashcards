@@ -76,6 +76,9 @@ class EditStack(QWidget):
         #start editing new card
         self.switchToCard(cid)
 
+        item = QListWidgetItem("New Card")
+        self.listWidget.addItem(item)
+
     def selectFile(self, title, fileOptions):
         fileName, _ = QFileDialog.getOpenFileName(self, title, "", fileOptions)
         return fileName
@@ -142,13 +145,12 @@ class EditStack(QWidget):
         #TODO: list of cards
 
         viewCards = QVBoxLayout()
-        buttonI = QListWidget()
-        for i in range(10):
-            item = QListWidgetItem("Ex %i" % i)
-            buttonI.addItem(item)
-        #button = QPushButton('New Card 1')
-    
-        viewCards.addWidget(buttonI)
+        self.listWidget = QListWidget()
+        item = QListWidgetItem("New Card")
+        
+        self.listWidget.addItem(item)
+        self.listWidget.itemClicked.connect(self.reloadCard)
+        viewCards.addWidget(self.listWidget)
      
         row.addLayout(viewCards)
 
@@ -221,6 +223,10 @@ class EditStack(QWidget):
 
         self.show()
 
+    def item_clicked(self, item):
+    
+        print (item, str(item.text()))
+        
     #save changes to database
     def save(self):
         #don't save if a card is not loaded
