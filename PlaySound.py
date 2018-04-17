@@ -6,28 +6,29 @@ from pathlib import Path #for checking file exist
 
 class PlaySound(QWidget):
 
-    wav_path = 'default' #file path
-    is_exist = False #for debugging purpose
-
+    # wav is the file path
     def __init__(self, wav):
-        # wav is the file path
 
-        super().__init__(self)
+        super().__init__()
 
         #check if file exist
         my_file = Path(wav)
+
         if my_file.is_file():
-            play_sound.is_exist = True
+            self.fileExists = True
         else:
+            self.fileExists = False
             print('file NOT exist')
 
-        play_sound.wav_path = wav
+        self.wav_path = wav
+
         self.initUI()
 
     def initUI(self):
         self.setMinimumSize(32,32)
-        self.b1 = QPushButton("Play", self)
-        self.b1.clicked.connect(self.Play)
 
-    def Play(self):
-        QSound.play( play_sound.wav_path)
+        self.b1 = QPushButton("Play", self)
+        self.b1.clicked.connect(self.play)
+
+    def play(self):
+        QSound.play(self.wav_path)
