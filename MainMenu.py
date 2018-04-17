@@ -116,7 +116,7 @@ class MainMenu(QWidget):
             row.addWidget(stackNameLabel)
 
             row.addStretch(1)
-            image = ImagePreview()
+            image = ImagePreview(stackID)
 
             row.addWidget(image)
 
