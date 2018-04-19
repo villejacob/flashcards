@@ -152,7 +152,7 @@ class ViewStack(QWidget):
             row.addWidget(viewImage)
 
             #audio
-            hearAudio = QPushButton('Hear Audio')
+            hearAudio = PlaySound(self.audioLocation)
             row.addWidget(hearAudio)
 
 	        #video

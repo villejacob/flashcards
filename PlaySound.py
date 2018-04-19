@@ -25,10 +25,10 @@ class PlaySound(QWidget):
         self.initUI()
 
     def initUI(self):
-        self.setMinimumSize(32,32)
-
-        self.b1 = QPushButton("Play", self)
+        self.b1 = QPushButton("Play Audio", self)
         self.b1.clicked.connect(self.play)
+
+        self.setMinimumSize(self.b1.size())
 
     def play(self):
         QSound.play(self.wav_path)
