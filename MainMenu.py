@@ -116,7 +116,26 @@ class MainMenu(QWidget):
             row.addWidget(stackNameLabel)
 
             row.addStretch(1)
-            image = ImagePreview(stackID)
+
+            cards = get_stack_cards(stackID)
+
+            #Initial variable to hold None if no images are found and make sure
+            # preview_asset is a local variable
+            preview_asset = [None,None,None,None]
+
+            #Loop through all cards in a stack
+            for card in cards:
+                card_image = get_card_asset(card[0],"image")
+                if card_image is not None:
+                    #Checks if there is a path
+                    if card_image[3] is not None:
+                        #A path was found so it saves it to the variable and
+                        #breaks the loop since we only need to find one image
+                        preview_asset = card_image
+                        break
+
+            #Passes the preview_asset variable and the size needed
+            image = ImagePreview(preview_asset, 32)
 
             row.addWidget(image)
 

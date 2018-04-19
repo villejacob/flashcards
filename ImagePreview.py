@@ -5,21 +5,22 @@ import sys
 
 class ImagePreview(QWidget):
 
-    def __init__(self, CardID):
+    def __init__(self, imagePath, size):
         super().__init__()
-        self.CardID = CardID
+        self.imagePath = imagePath
+        self.size = size
         self.initUI()
 
     def initUI(self):
-        self.setMinimumSize(32,32)
+        self.setMinimumSize(self.size,self.size)
         label = QLabel(self)
 
-        #TODO: dynamic pathing
-        imagePath = get_card_asset(self.CardID, "image")
-        if type(imagePath):
+        if self.imagePath is None:
             pixmap = QPixmap('No_image.png')
-
+        elif self.imagePath[3] is None:
+            pixmap = QPixmap('No_image.png')
         else:
-            pixmap = QPixmap(imagePath[3])
-        resize_pixmap = pixmap.scaled(32, 32)
+            pixmap = QPixmap(self.imagePath[3])
+
+        resize_pixmap = pixmap.scaled(self.size, self.size)
         label.setPixmap(resize_pixmap)
