@@ -5,22 +5,58 @@ from PyQt5.QtWidgets import (QApplication, QFileDialog, QHBoxLayout, QLabel,
         QPushButton, QSizePolicy, QSlider, QStyle, QVBoxLayout, QWidget)
 from PyQt5.QtWidgets import QMainWindow,QWidget, QPushButton, QAction
 from PyQt5.QtGui import QIcon
+from db.helpers import*
 import sys
  
-class VideoWindow(QMainWindow):
+class ViewVideo(QMainWindow):
+ 	
 
-    where = 'default'
+    def __init__(self, videoLocation=None):
+
+        self.videoLocation = videoLocation
+        super().__init__()
+
+        self.resize(640, 480)
+        self.setWindowTitle("Video") 
+         
+    def exitCall(self):
+        self.mediaPlayer.setVolume(0)
+        self.mediaPlayer.stop()
+        
+    def play(self):
+        self.mediaPlayer.setMedia(QMediaContent(QUrl.fromLocalFile(self.videoLocation)))
+        if self.mediaPlayer.state() == QMediaPlayer.PlayingState:
+            self.mediaPlayer.pause()
+        else:
+            self.mediaPlayer.play()
  
-    def __init__(self, video):
-        
-        self.where = video
-        super(VideoWindow, self).__init__(None)
-        self.setWindowTitle(video) 
-        
+    def mediaStateChanged(self, state):
+        if self.mediaPlayer.state() == QMediaPlayer.PlayingState:
+            self.playButton.setIcon(
+                    self.style().standardIcon(QStyle.SP_MediaPause))
+        else:
+            self.playButton.setIcon(
+                    self.style().standardIcon(QStyle.SP_MediaPlay))
+ 
+    def positionChanged(self, position):
+        self.positionSlider.setValue(position)
+ 
+    def durationChanged(self, duration):
+        self.positionSlider.setRange(0, duration)
+ 
+    def setPosition(self, position):
+        self.mediaPlayer.setPosition(position)
+ 
+    def handleError(self):
+        self.playButton.setEnabled(False)
+        self.errorLabel.setText("Error: " + self.mediaPlayer.errorString())
+    
+    def create(self):
         self.mediaPlayer = QMediaPlayer(None, QMediaPlayer.VideoSurface)
  
         videoWidget = QVideoWidget()
- 
+
+        
         self.playButton = QPushButton()
         self.playButton.setEnabled(True) 
         self.playButton.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))
@@ -36,20 +72,18 @@ class VideoWindow(QMainWindow):
         self.positionSlider.sliderMoved.connect(self.setPosition)
  
         self.errorLabel = QLabel()
-        self.errorLabel.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
- 
+        self.errorLabel.setSizePolicy(QSizePolicy.Preferred,
+                QSizePolicy.Maximum)
 
-      
  
-        # Create exit action
-        exitAction = QAction(QIcon('exit.png'), '&Stop', self)       
+        # Exit from Menu
+        exitAction = QAction(QIcon('exit.png'), '&Exit', self)        
+        exitAction.setStatusTip('Exit application')
         exitAction.triggered.connect(self.exitCall)
  
-        # Create menu bar and add action
+        # Create menu bar
         menuBar = self.menuBar()
-        fileMenu = menuBar.addMenu('&File')
-        
-        #fileMenu.addAction(openAction)
+        fileMenu = menuBar.addMenu('&Menu')
         fileMenu.addAction(exitAction)
  
         # Create a widget for window contents
@@ -75,46 +109,6 @@ class VideoWindow(QMainWindow):
         self.mediaPlayer.stateChanged.connect(self.mediaStateChanged)
         self.mediaPlayer.positionChanged.connect(self.positionChanged)
         self.mediaPlayer.durationChanged.connect(self.durationChanged)
-        self.mediaPlayer.error.connect(self.handleError) 
+        self.mediaPlayer.error.connect(self.handleError)
 
- 
-    def exitCall(self):
-        self.mediaPlayer.setVolume(0)
-        self.mediaPlayer.stop()
-        
-    def play(self):
-        self.mediaPlayer.setMedia(QMediaContent(QUrl.fromLocalFile(self.where)))
-        if self.mediaPlayer.state() == QMediaPlayer.PlayingState:
-            self.mediaPlayer.pause()
-        else:
-            self.mediaPlayer.setVolume(100)
-            self.mediaPlayer.play()
- 
-    def mediaStateChanged(self, state):
-        if self.mediaPlayer.state() == QMediaPlayer.PlayingState:
-            self.playButton.setIcon(
-                    self.style().standardIcon(QStyle.SP_MediaPause))
-        else:
-            self.playButton.setIcon(
-                    self.style().standardIcon(QStyle.SP_MediaPlay))
- 
-    def positionChanged(self, position):
-        self.positionSlider.setValue(position)
- 
-    def durationChanged(self, duration):
-        self.positionSlider.setRange(0, duration)
- 
-    def setPosition(self, position):
-        self.mediaPlayer.setPosition(position)
- 
-    def handleError(self):
-        self.playButton.setEnabled(False)
-        self.errorLabel.setText("Error: " + self.mediaPlayer.errorString())
- 
- 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    player = VideoWindow('goat.avi')
-    player.resize(640, 480)
-    player.show()
-    sys.exit(app.exec_())
+        self.show()
