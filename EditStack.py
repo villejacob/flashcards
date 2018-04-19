@@ -62,7 +62,7 @@ class EditStack(QWidget):
     def selectAudioFile(self):
         #TODO: update with accepted audio files
         fileName = self.selectFile("Select Audio",
-            "Audio Files (*.mp3)",
+            "Audio Files (*.mp3 *.wav)",
             self.audioLocation)
 
         if fileName and fileName != self.audioLocation:
