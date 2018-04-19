@@ -16,6 +16,10 @@ class ImagePreview(QWidget):
 
         #TODO: dynamic pathing
         imagePath = get_card_asset(self.CardID, "image")
-        pixmap = QPixmap(imagePath[3])
+        if type(imagePath):
+            pixmap = QPixmap('No_image.png')
+
+        else:
+            pixmap = QPixmap(imagePath[3])
         resize_pixmap = pixmap.scaled(32, 32)
         label.setPixmap(resize_pixmap)
