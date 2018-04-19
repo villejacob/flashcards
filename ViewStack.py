@@ -137,7 +137,6 @@ class ViewStack(QWidget):
 
             self.fullLayout.addStretch(1)
 
-<<<<<<< 907fbc0f32953da2d0a47d5ee8e3d0aa5f92398e
             row = QHBoxLayout()
 
             row.addStretch(5)
@@ -168,11 +167,7 @@ class ViewStack(QWidget):
 
 
         self.fullLayout.addLayout(row)
-=======
-        #test code for play audio
-        self.fullLayout.addWidget(PlaySound('goat.wav'))
 
->>>>>>> set up to use instance variables instead of static class variables
         self.setLayout(self.fullLayout)
 
         self.show()
