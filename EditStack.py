@@ -149,7 +149,7 @@ class EditStack(QWidget):
         item = QListWidgetItem("New Card")
         
         self.listWidget.addItem(item)
-        self.listWidget.itemClicked.connect(self.reloadCard)
+        self.listWidget.itemClicked.connect(self.switchToCard(self.cardID))
         viewCards.addWidget(self.listWidget)
      
         row.addLayout(viewCards)
@@ -222,10 +222,7 @@ class EditStack(QWidget):
             self.addCard()
 
         self.show()
-
-    def item_clicked(self, item):
-    
-        print (item, str(item.text()))
+        
         
     #save changes to database
     def save(self):
