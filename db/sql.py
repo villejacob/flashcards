@@ -49,11 +49,17 @@ sql_create_assets_table = '''
 
 sql_insert_stack = '''
     INSERT INTO stacks(name, last_reviewed)
-    VALUES(?,NULL)
+    VALUES(?,?)
     '''
 
 sql_delete_stack = '''
     DELETE FROM stacks WHERE id=?
+    '''
+
+sql_update_stack_date = '''
+    UPDATE stacks
+    SET last_reviewed=?
+    WHERE id=?
     '''
 
 sql_check_stack_exists = '''
