@@ -49,9 +49,7 @@ class MainMenu(QWidget):
         print('Deleting Stack ' + str(stackID))
         delete_stack(stackID)
 
-        #Refresh window with deleted stack
-        QWidget().setLayout(self.layout())
-        self.create()
+        self.refresh()
 
     @pyqtSlot()
     def onAddStackClick(self):
@@ -82,11 +80,12 @@ class MainMenu(QWidget):
 
             create_stack(stackName)
 
-            #create a new widget and apply the current layout to it
-            #this removes the reference so that the layout will be
-            #garbage collected
-            QWidget().setLayout(self.layout())
-            self.create() #redraw on add
+            self.refresh()
+
+
+    def refresh(self):
+        QWidget().setLayout(self.layout())
+        self.create()
 
 
     def create(self):
@@ -139,7 +138,11 @@ class MainMenu(QWidget):
 
             row.addWidget(image)
 
-            row.addStretch(5)
+            row.addStretch(1)
+            lastReviewedLabel = QLabel("Last Reviewed: " + str(stack[2]))
+            row.addWidget(lastReviewedLabel)
+
+            row.addStretch(4)
 
             #note: the "check" parameter is needed in the lambda as it
             #is passed by the clicked event (it is a boolean signifying if

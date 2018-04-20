@@ -72,6 +72,8 @@ class ViewStack(QWidget):
 
     def create(self):
 
+        update_stack_review_date(self.stackID)
+
         self.fullLayout = QVBoxLayout()
 
         #create the top row of the layout to have
@@ -103,7 +105,8 @@ class ViewStack(QWidget):
         #retrieve cards from DB
         self.cardIDs = get_stack_cards(self.stackID)
 
-        self.switchToCard(self.cardIDs[0][0])
+        if len(self.cardIDs) > 0:
+            self.switchToCard(self.cardIDs[0][0])
 
         #add row for navigation
         self.fullLayout.addLayout(row)

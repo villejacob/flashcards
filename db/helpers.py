@@ -1,5 +1,6 @@
 from db.OpenConn import ConnManager
 from db.sql import *
+from datetime import *
 
 def initialize_tables():
     create_table(sql_create_stacks_table)
@@ -18,7 +19,7 @@ def create_table(sql):
 
 def create_stack(name):
     with ConnManager() as cursor:
-        cursor.execute(sql_insert_stack, (name,))
+        cursor.execute(sql_insert_stack, (name, get_date()))
         return cursor.lastrowid
 
 
@@ -35,6 +36,11 @@ def get_stacks():
     with ConnManager() as cursor:
         cursor.execute("SELECT * FROM stacks")
         return cursor.fetchall()
+
+def update_stack_review_date(stack_id):
+    with ConnManager() as cursor:
+        cursor.execute(sql_update_stack_date, (get_date(), stack_id))
+        return
 
 def stack_name_exists(stack_name):
     with ConnManager() as cursor:
@@ -109,3 +115,9 @@ def get_card_asset(card_id, asset_type):
     with ConnManager() as cursor:
         cursor.execute(sql_select_asset_by_card_id, (card_id, asset_type,))
         return cursor.fetchone()
+
+
+# Additional Helpers
+
+def get_date():
+    return datetime.now().strftime("%m-%d-%Y %H:%M")
