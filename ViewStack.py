@@ -2,8 +2,10 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from CommonGUIComponents import *
 from db.helpers import *
+from ViewCard import *
+from ViewVideo import *
 from PlaySound import *
-from ViewVideo import*
+
 
 class ViewStack(QWidget):
 
@@ -12,8 +14,7 @@ class ViewStack(QWidget):
         self.stackID = stackID
         self.mainMenu = mainMenu
         self.cardID = None
-        #variable for determing which side of the card is being viewed
-        self.viewFront = True
+        self.viewQuestion = True
 
         super().__init__()
 
@@ -51,28 +52,19 @@ class ViewStack(QWidget):
 
     @pyqtSlot()
     def onFlipClick(self):
-        #changes the side of the card being viewed
-        if (self.viewFront == True):
-            self.viewFront = False
-            print('success')
-        else:
-            self.viewFront = True
-        #refresh page
+        self.viewQuestion = not self.viewQuestion
         QWidget().setLayout(self.layout())
         self.create()
 
     def switchToCard(self, cardID):
     	#gets information from a card, same as EditStack
         self.cardID = cardID
-        dbData = get_card_assets(self.cardID)
-        print(dbData)
+        cardAssets = get_card_assets(self.cardID)
 
         #key is asset type
         #value is (id, content, filename)
-        self.assetDict = {row[1]: (row[0], row[2], row[3],) for row in dbData}
+        self.assetDict = {row[1]: (row[0], row[2], row[3],) for row in cardAssets}
 
-        self.frontText = self.assetDict.get('question', ('', '', ''))[1]
-        self.backText = self.assetDict.get('answer', ('', '', ''))[1]
         self.imageLocation = self.assetDict.get('image', ('', '', ''))[2]
         self.videoLocation = self.assetDict.get('video', ('', '', ''))[2]
         self.audioLocation = self.assetDict.get('audio', ('', '', ''))[2]
@@ -122,32 +114,20 @@ class ViewStack(QWidget):
 
             row = QHBoxLayout()
 
-            #displays labels
-            if (self.viewFront == True):
-                frontLabel = QLabel(self.frontText)
-                frontLabel.setAlignment(Qt.AlignCenter)
-                row.addWidget(frontLabel)
-
-            else:
-                backLabel = QLabel(self.backText)
-                backLabel.setAlignment(Qt.AlignCenter)
-                row.addWidget(backLabel)
+            viewCard = ViewCard(self.cardID, self.viewQuestion)
+            row.addWidget(viewCard)
 
             self.fullLayout.addLayout(row)
-
             self.fullLayout.addStretch(1)
 
             row = QHBoxLayout()
 
             row.addStretch(5)
 
-            #GUI for showing cards goes here
-            #needs to be added to self.fullLayout
-
             #TODO: add view stack code
 
             row.addStretch(1)
-           #image
+            #image
             viewImage = QPushButton('View Image')
             row.addWidget(viewImage)
 
