@@ -5,16 +5,21 @@ from db.helpers import *
 
 class ViewCard(QWidget):
 
-    def __init__(self, cardID, viewQuestion=True):
+    def __init__(self, cardID, viewQuestion=True, fullDisplay=True):
         self.cardID = cardID
         self.viewQuestion = viewQuestion
+        self.fullDisplay = fullDisplay
 
         super().__init__()
 
-        self.setGeometry(300, 300, 250, 150)
 
-        self.setMaximumSize(300, 200)
-        self.setMinimumSize(300, 200)
+        if self.fullDisplay:
+            self.setMaximumSize(300, 200)
+            self.setMinimumSize(300, 200)
+        else:
+            self.setMaximumSize(150, 100)
+            self.setMinimumSize(150, 100)
+
         self.setStyleSheet("background-color: rgb(255,255,255)")
 
         self.layout = QVBoxLayout(self)
@@ -29,6 +34,13 @@ class ViewCard(QWidget):
 
         self.textLabel = QLabel(text)
         self.textLabel.setAlignment(Qt.AlignCenter)
+        self.textLabel.setWordWrap(True)
+
+        if self.fullDisplay:
+            self.textLabel.setStyleSheet("font: 12px")
+        else:
+            self.textLabel.setStyleSheet("font: 6px")
+
         self.layout.addWidget(self.textLabel)
 
         self.setLayout(self.layout)
