@@ -107,39 +107,27 @@ class MainMenu(QWidget):
         for stack in stacks:
             stackID = stack[0]
             stackName = str(stack[1])
+            lastReviewed = str(stack[2])
 
             row = QHBoxLayout()
             row.addStretch(0.5)
 
-            stackNameLabel = QLabel(stackName)
-            row.addWidget(stackNameLabel)
+            stackPreview = QVBoxLayout()
+            stackPreview.setSpacing(0)
 
-            row.addStretch(1)
+            stackNameLabel = QLabel(stackName)
+            stackNameLabel.setAlignment(Qt.AlignCenter)
+            stackPreview.addWidget(stackNameLabel)
 
             cards = get_stack_cards(stackID)
+            if len(cards) > 0:
+                topCard = ViewCard(cards[0][0], True, False)
+                stackPreview.addWidget(topCard)
 
-            #Initial variable to hold None if no images are found and make sure
-            # preview_asset is a local variable
-            preview_asset = [None,None,None,None]
-
-            #Loop through all cards in a stack
-            for card in cards:
-                card_image = get_card_asset(card[0],"image")
-                if card_image is not None:
-                    #Checks if there is a path
-                    if card_image[3] is not None:
-                        #A path was found so it saves it to the variable and
-                        #breaks the loop since we only need to find one image
-                        preview_asset = card_image
-                        break
-
-            #Passes the preview_asset variable and the size needed
-            image = ImagePreview(preview_asset, 32)
-
-            row.addWidget(image)
+            row.addLayout(stackPreview)
 
             row.addStretch(1)
-            lastReviewedLabel = QLabel("Last Reviewed: " + str(stack[2]))
+            lastReviewedLabel = QLabel("Last Reviewed: \n" + lastReviewed)
             row.addWidget(lastReviewedLabel)
 
             row.addStretch(4)
