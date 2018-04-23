@@ -11,6 +11,8 @@ class EditStack(QWidget):
         self.mainMenu = mainMenu
         self.unsavedChanges = False
         self.cardID = None
+        self.index = 0
+        self.cardNum = 0
 
         super().__init__()
 
@@ -39,7 +41,10 @@ class EditStack(QWidget):
     @pyqtSlot()
     def selectImageFile(self):
         #TODO: update with accepted image files
-        fileName = self.selectFile("Select Image", "Image Files (*.png *.bmp *.jpg *.jpeg)")
+        fileName = self.selectFile("Select Image",
+            "Image Files (*.png *.bmp *.jpg *.jpeg)",
+            self.imageLocation)
+
         if fileName and fileName != self.imageLocation:
             self.makeChanges()
             self.imageLocation = fileName
@@ -47,7 +52,10 @@ class EditStack(QWidget):
     @pyqtSlot()
     def selectVideoFile(self):
         #TODO: update with accepted video files
-        fileName = self.selectFile("Select Video", "Video Files (*.avi *.mp4 *.flv)")
+        fileName = self.selectFile("Select Video",
+            "Video Files (*.avi *.mp4 *.flv)",
+            self.videoLocation)
+
         if fileName and fileName != self.videoLocation:
             self.makeChanges()
             self.videoLocation = fileName
@@ -55,7 +63,10 @@ class EditStack(QWidget):
     @pyqtSlot()
     def selectAudioFile(self):
         #TODO: update with accepted audio files
-        fileName = self.selectFile("Select Audio", "Audio Files (*.mp3)")
+        fileName = self.selectFile("Select Audio",
+            "Audio Files (*.mp3)",
+            self.audioLocation)
+
         if fileName and fileName != self.audioLocation:
             self.makeChanges()
             self.audioLocation = fileName
@@ -75,12 +86,12 @@ class EditStack(QWidget):
 
         #start editing new card
         self.switchToCard(cid)
-
-        item = QListWidgetItem("New Card")
+        item = QListWidgetItem("Card " + str(self.cardNum))
         self.listWidget.addItem(item)
+        self.cardNum += 1
 
-    def selectFile(self, title, fileOptions):
-        fileName, _ = QFileDialog.getOpenFileName(self, title, "", fileOptions)
+    def selectFile(self, title, fileOptions, defaultFile=''):
+        fileName, _ = QFileDialog.getOpenFileName(self, title, defaultFile, fileOptions)
         return fileName
 
     def reloadCard(self):
@@ -96,8 +107,8 @@ class EditStack(QWidget):
         #value is (id, content, filename)
         self.assetDict = {row[1]: (row[0], row[2], row[3],) for row in dbData}
 
-        self.frontText.setPlainText(self.assetDict.get('question', ('', '', ''))[1])
-        self.backText.setPlainText(self.assetDict.get('answer', ('', '', ''))[1])
+        self.frontText = self.assetDict.get('question', ('', '', ''))[1]
+        self.backText = self.assetDict.get('answer', ('', '', ''))[1]
         self.imageLocation = self.assetDict.get('image', ('', '', ''))[2]
         self.videoLocation = self.assetDict.get('video', ('', '', ''))[2]
         self.audioLocation = self.assetDict.get('audio', ('', '', ''))[2]
@@ -138,118 +149,131 @@ class EditStack(QWidget):
 
         self.fullLayout.addStretch(1)
 
-        #rest of GUI added here
-
-        row = QHBoxLayout()
-
-        #TODO: list of cards
-
-        viewCards = QVBoxLayout()
-        self.listWidget = QListWidget()
-        item = QListWidgetItem("New Card")
-        
-        self.listWidget.addItem(item)
-        self.listWidget.itemClicked.connect(self.switchToCard(self.cardID))
-        viewCards.addWidget(self.listWidget)
-     
-        row.addLayout(viewCards)
-
-        row.addStretch(2)
-
-        editSplit = QVBoxLayout()
-
-        editArea = QGroupBox('Edit Card')                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
-
-        #this could potentially be dynamically generated
-        #it would be challenging to handle the updates
-
-        editForm = QFormLayout()
-
-        self.frontText = QTextEdit()
-        self.frontText.textChanged.connect(self.makeChanges)
-        editForm.addRow(QLabel('Front text'), self.frontText)
-
-        self.backText = QTextEdit()
-        self.backText.textChanged.connect(self.makeChanges)
-        editForm.addRow(QLabel('Back text'), self.backText)
-
-        #image file browser
-        selectImage = QPushButton('Browse')
-        selectImage.clicked.connect(self.selectImageFile)
-        editForm.addRow(QLabel('Select Image'), selectImage)
-
-        #video file browser
-        selectVideo = QPushButton('Browse')
-        selectVideo.clicked.connect(self.selectVideoFile)
-        editForm.addRow(QLabel('Select Video'), selectVideo)
-
-        #audio file browser
-        selectAudio = QPushButton('Browse')
-        selectAudio.clicked.connect(self.selectAudioFile)
-        editForm.addRow(QLabel('Select Audio'), selectAudio)
-
-        editArea.setLayout(editForm)
-
-        editSplit.addWidget(editArea)
-
-        saveChangesDialog = QDialogButtonBox(QDialogButtonBox.Save)
-        saveChangesDialog.accepted.connect(self.save)
-
-        editSplit.addWidget(saveChangesDialog)
-
-        editSplit.addStretch(1)
-
-        #TODO: add drag/drop components (maybe)
-        #could be something else
-
-        row.addLayout(editSplit)
-
-        row.addStretch(1)
-
-        self.fullLayout.addLayout(row)
-
-        self.fullLayout.addStretch(1)
-
-        self.setLayout(self.fullLayout)
-
         self.cardIDs = get_stack_cards(self.stackID)
+
+        #rest of GUI added here
 
         #check if there is at least on card and create
         #it if there isn't
         if len(self.cardIDs) > 0:
             self.switchToCard(self.cardIDs[0][0])
+            row = QHBoxLayout()
+
+            #TODO: list of cards
+            viewCards = QVBoxLayout()
+            self.listWidget = QListWidget()
+            cardNum = 1
+            for self.cardID in self.cardIDs:
+                item = QListWidgetItem("Card " + str(cardNum))
+        
+                self.listWidget.addItem(item)
+                cardNum += 1
+
+            self.cardNum = cardNum
+            #self.listWidget.itemClicked.connect(self.switchToCard(self.cardIDs[self.listWidget.currentRow()-1][0]))
+            viewCards.addWidget(self.listWidget)
+     
+            row.addLayout(viewCards)
+
+            row.addStretch(2)
+
+            editSplit = QVBoxLayout()
+
+            editArea = QGroupBox('Edit Card')
+
+            #this could potentially be dynamically generated
+            #it would be challenging to handle the updates
+
+            editForm = QFormLayout()
+
+            self.front = QTextEdit()
+            self.front.setPlainText(self.frontText)
+            self.front.textChanged.connect(self.makeChanges)
+            editForm.addRow(QLabel('Front text'), self.front)
+
+            self.back = QTextEdit()
+            self.back.setPlainText(self.backText)
+            self.back.textChanged.connect(self.makeChanges)
+            editForm.addRow(QLabel('Back text'), self.back)
+
+            #image file browser
+            selectImage = QPushButton('Browse')
+            selectImage.clicked.connect(self.selectImageFile)
+            editForm.addRow(QLabel('Select Image'), selectImage)
+
+            #video file browser
+            selectVideo = QPushButton('Browse')
+            selectVideo.clicked.connect(self.selectVideoFile)
+            editForm.addRow(QLabel('Select Video'), selectVideo)
+
+            #audio file browser
+            selectAudio = QPushButton('Browse')
+            selectAudio.clicked.connect(self.selectAudioFile)
+            editForm.addRow(QLabel('Select Audio'), selectAudio)
+
+            editArea.setLayout(editForm)
+
+            editSplit.addWidget(editArea)
+
+            saveChangesDialog = QDialogButtonBox(QDialogButtonBox.Save)
+            saveChangesDialog.accepted.connect(self.save)
+
+            editSplit.addWidget(saveChangesDialog)
+
+            editSplit.addStretch(1)
+
+            #TODO: add drag/drop components (maybe)
+            #could be something else
+
+            row.addLayout(editSplit)
+
+            row.addStretch(1)
+
+            self.fullLayout.addLayout(row)
         else:
             self.addCard()
 
+
+        self.fullLayout.addStretch(1)
+
+        self.setLayout(self.fullLayout)
+
         self.show()
-        
-        
+
     #save changes to database
     def save(self):
         #don't save if a card is not loaded
         if self.cardID is None:
             return
 
+        answerID = get_card_answer(self.cardID)
+
         #check each field to make sure it has an entry in the db
         if 'question' in self.assetDict:
             aid = self.assetDict['question'][0]
-            update_asset(aid, self.frontText.toPlainText(), None)
+            update_asset(aid, self.front.toPlainText(), None)
 
         if 'answer' in self.assetDict:
             aid = self.assetDict['answer'][0]
-            update_asset(aid, self.backText.toPlainText(), None)
+            update_asset(aid, self.back.toPlainText(), None)
 
         if 'image' in self.assetDict:
             aid = self.assetDict['image'][0]
             update_asset(aid, None, self.imageLocation)
+        elif self.imageLocation != '' and not self.imageLocation.isspace():
+            create_asset((None, answerID, 'image', None, self.imageLocation, 0, 0, 0, 0,))
 
         if 'video' in self.assetDict:
             aid = self.assetDict['video'][0]
             update_asset(aid, None, self.videoLocation)
+        elif self.videoLocation != '' and not self.videoLocation.isspace():
+            create_asset((None, answerID, 'video', None, self.videoLocation, 0, 0, 0, 0,))
 
         if 'audio' in self.assetDict:
             aid = self.assetDict['audio'][0]
             update_asset(aid, None, self.audioLocation)
+        elif self.audioLocation != '' and not self.audioLocation.isspace():
+            create_asset((None, answerID, 'audio', None, self.audioLocation, 0, 0, 0, 0,))
 
         self.unsavedChanges = False
 
