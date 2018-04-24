@@ -15,6 +15,8 @@ class ViewStack(QWidget):
         self.mainMenu = mainMenu
         self.cardID = None
         self.viewQuestion = True
+        self.index = 0
+        self.count = 0
 
         super().__init__()
 
@@ -56,6 +58,31 @@ class ViewStack(QWidget):
         QWidget().setLayout(self.layout())
         self.create()
 
+    def onNextClick(self):
+        if (self.index < self.count - 1):
+            self.index += 1
+            self.viewQuestion = True
+            QWidget().setLayout(self.layout())
+            self.create()
+        else:
+            msg = QMessageBox()
+            msg.setText("No Next")
+            msg.setWindowTitle("Attention!")
+            retval = msg.exec_()
+
+
+    def onPreviousClick(self):
+        if (self.index > 0):
+            self.index -= 1
+            self.viewQuestion = True
+            QWidget().setLayout(self.layout())
+            self.create()
+        else:
+            msg = QMessageBox()
+            msg.setText("No Previous")
+            msg.setWindowTitle("Attention!")
+            retval = msg.exec_()
+
     def switchToCard(self, cardID):
     	#gets information from a card, same as EditStack
         self.cardID = cardID
@@ -73,6 +100,7 @@ class ViewStack(QWidget):
     def create(self):
 
         update_stack_review_date(self.stackID)
+        self.count = 0
 
         self.fullLayout = QVBoxLayout()
 
@@ -106,8 +134,10 @@ class ViewStack(QWidget):
         self.cardIDs = get_stack_cards(self.stackID)
 
         if len(self.cardIDs) > 0:
-            self.switchToCard(self.cardIDs[0][0])
-
+            self.switchToCard(self.cardIDs[self.index][0])
+            for i in self.cardIDs:
+                self.count += 1
+                
         #add row for navigation
         self.fullLayout.addLayout(row)
 
@@ -124,6 +154,15 @@ class ViewStack(QWidget):
             self.fullLayout.addStretch(1)
 
             row = QHBoxLayout()
+
+            #next and previous buttons
+            goPrevious = QPushButton('Previous')
+            goPrevious.clicked.connect(self.onPreviousClick)
+            row.addWidget(goPrevious)
+
+            goNext = QPushButton('Next')
+            goNext.clicked.connect(self.onNextClick)
+            row.addWidget(goNext)
 
             row.addStretch(5)
 

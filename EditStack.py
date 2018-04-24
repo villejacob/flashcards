@@ -11,6 +11,8 @@ class EditStack(QWidget):
         self.mainMenu = mainMenu
         self.unsavedChanges = False
         self.cardID = None
+        self.index = 0
+        self.cardNum = 0
 
         super().__init__()
 
@@ -69,6 +71,32 @@ class EditStack(QWidget):
             self.makeChanges()
             self.audioLocation = fileName
 
+    def onNextClick(self):
+        if (self.index < self.count - 1):
+            self.index += 1
+            self.viewQuestion = True
+            QWidget().setLayout(self.layout())
+            self.create()
+        else:
+            msg = QMessageBox()
+            msg.setText("No Next")
+            msg.setWindowTitle("Attention!")
+            retval = msg.exec_()
+
+
+    def onPreviousClick(self):
+        if (self.index > 0):
+            self.index -= 1
+            self.viewQuestion = True
+            QWidget().setLayout(self.layout())
+            self.create()
+        else:
+            msg = QMessageBox()
+            msg.setText("No Previous")
+            msg.setWindowTitle("Attention!")
+            retval = msg.exec_()
+
+
     @pyqtSlot()
     def addCard(self):
         cid = create_card(self.stackID)
@@ -84,6 +112,10 @@ class EditStack(QWidget):
 
         #start editing new card
         self.switchToCard(cid)
+
+        item = QListWidgetItem("Card " + str(self.cardNum))
+        self.listWidget.addItem(item)
+        self.cardNum += 1
 
     def selectFile(self, title, fileOptions, defaultFile=''):
         fileName, _ = QFileDialog.getOpenFileName(self, title, defaultFile, fileOptions)
@@ -144,11 +176,28 @@ class EditStack(QWidget):
 
         self.fullLayout.addStretch(1)
 
+        self.cardIDs = get_stack_cards(self.stackID)
         #rest of GUI added here
 
         row = QHBoxLayout()
 
         #TODO: list of cards
+        viewCards = QVBoxLayout()
+        self.listWidget = QListWidget()
+        cardNum = 1
+        self.count = 0
+        for self.cardID in self.cardIDs:
+            item = QListWidgetItem("Card " + str(cardNum))
+        
+            self.listWidget.addItem(item)
+            cardNum += 1
+            self.count += 1
+
+        self.cardNum = cardNum
+        #self.listWidget.itemClicked.connect(self.switchToCard(self.cardIDs[self.listWidget.currentRow()-1][0]))
+        viewCards.addWidget(self.listWidget)
+     
+        row.addLayout(viewCards)
 
         row.addStretch(2)
 
@@ -188,6 +237,15 @@ class EditStack(QWidget):
 
         editSplit.addWidget(editArea)
 
+        #next and previous buttons
+        goPrevious = QPushButton('Previous')
+        goPrevious.clicked.connect(self.onPreviousClick)
+        editSplit.addWidget(goPrevious)
+
+        goNext = QPushButton('Next')
+        goNext.clicked.connect(self.onNextClick)
+        editSplit.addWidget(goNext)
+
         saveChangesDialog = QDialogButtonBox(QDialogButtonBox.Save)
         saveChangesDialog.accepted.connect(self.save)
 
@@ -213,7 +271,7 @@ class EditStack(QWidget):
         #check if there is at least on card and create
         #it if there isn't
         if len(self.cardIDs) > 0:
-            self.switchToCard(self.cardIDs[0][0])
+            self.switchToCard(self.cardIDs[self.index][0])
         else:
             self.addCard()
 
