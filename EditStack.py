@@ -13,6 +13,7 @@ class EditStack(QWidget):
         self.cardID = None
         self.index = 0
         self.cardNum = 0
+        self.count = 0
 
         super().__init__()
 
@@ -116,6 +117,28 @@ class EditStack(QWidget):
         item = QListWidgetItem("Card " + str(self.cardNum))
         self.listWidget.addItem(item)
         self.cardNum += 1
+        if (self.count > 0):
+        	self.index+=1
+        QWidget().setLayout(self.layout())
+        self.create()
+
+    @pyqtSlot()
+    def onDeleteCardClick(self):
+        if(self.count > 1):
+           print('Deleting Card ' + str(self.cardID))
+           delete_card(self.cardID)
+           if (self.index == self.count-1):
+               self.index -= 1
+
+           QWidget().setLayout(self.layout())
+           self.create()
+        else:
+            msg = QMessageBox()
+            msg.setText("Cannot delete final card")
+            msg.setWindowTitle("Attention!")
+            retval = msg.exec_()
+ 
+
 
     def selectFile(self, title, fileOptions, defaultFile=''):
         fileName, _ = QFileDialog.getOpenFileName(self, title, defaultFile, fileOptions)
@@ -246,6 +269,13 @@ class EditStack(QWidget):
         goNext.clicked.connect(self.onNextClick)
         editSplit.addWidget(goNext)
 
+        if len(self.cardIDs) > 0:
+            self.cardID = self.cardIDs[self.index][0]
+
+        deleteCard = QPushButton('Discard Card')
+        deleteCard.clicked.connect(self.onDeleteCardClick)
+        editSplit.addWidget(deleteCard)
+
         saveChangesDialog = QDialogButtonBox(QDialogButtonBox.Save)
         saveChangesDialog.accepted.connect(self.save)
 
@@ -265,8 +295,6 @@ class EditStack(QWidget):
         self.fullLayout.addStretch(1)
 
         self.setLayout(self.fullLayout)
-
-        self.cardIDs = get_stack_cards(self.stackID)
 
         #check if there is at least on card and create
         #it if there isn't
